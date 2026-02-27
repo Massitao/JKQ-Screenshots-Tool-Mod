@@ -25,6 +25,8 @@ namespace JKQScreenshotsToolMod.Helpers
     private const float DefaultCameraZPosition = -150F;
     private const float DefaultCameraFOV = 17f;
 
+    // Default Fog Values
+    private int _defaultFogDownsampling = 0;
 
     // Culling Masks
     private const Int32 DefaultCullingMask = 1345207;
@@ -33,16 +35,17 @@ namespace JKQScreenshotsToolMod.Helpers
 
     // Reflection References
     private static readonly Type ManualCameraControllerTypeRef = typeof(ManualCameraController);
-    private static readonly Type RTResolutionTypeRef = typeof(RTResolution);
-    private static readonly Type AttenuationTargetTypeRef = typeof(AttenuationTarget);
-
     private static readonly FieldInfo SpeedFieldInfo = AccessTools.Field(ManualCameraControllerTypeRef, "speed");
     private static readonly FieldInfo SmoothDampFieldInfo = AccessTools.Field(ManualCameraControllerTypeRef, "smoothDamp");
     private static readonly FieldInfo ZoomSpeedFieldInfo = AccessTools.Field(ManualCameraControllerTypeRef, "zoomSpeed");
     private static readonly FieldInfo MinFOVFieldInfo = AccessTools.Field(ManualCameraControllerTypeRef, "minFov");
     private static readonly FieldInfo MaxFOVFieldInfo = AccessTools.Field(ManualCameraControllerTypeRef, "maxFov");
     private static readonly FieldInfo CameraVelocityFieldInfo = AccessTools.Field(ManualCameraControllerTypeRef, "cameraVelocity");
-    private static readonly FieldInfo renderTextureInfo = AccessTools.Field(RTResolutionTypeRef, "renderTexture");
+
+    private static readonly Type RTResolutionTypeRef = typeof(RTResolution);
+    private static readonly FieldInfo RenderTextureInfo = AccessTools.Field(RTResolutionTypeRef, "renderTexture");
+
+    private static readonly Type AttenuationTargetTypeRef = typeof(AttenuationTarget);
     private static readonly FieldInfo AttenuationTargetPercentageFieldInfo = AccessTools.Field(AttenuationTargetTypeRef, "targetPercentage");
 
     private static readonly MethodInfo HandleModeChangedMethod = AccessTools.Method(typeof(ManualCameraController), "HandleModeChanged");
@@ -59,7 +62,7 @@ namespace JKQScreenshotsToolMod.Helpers
       _gameCamera = Camera.main;
       _manualCameraController = _gameCamera.GetComponentInChildren<Nexile.JKQuest.ManualCameraController>();
       _quad2D = _gameCamera.transform.Find("2dQuad").gameObject;
-      _quad2DRenderTexture = (RenderTexture)renderTextureInfo.GetValue(_gameCamera.GetComponentInChildren<RTResolution>());
+      _quad2DRenderTexture = (RenderTexture)RenderTextureInfo.GetValue(_gameCamera.GetComponentInChildren<RTResolution>());
       _attenuationTarget = _gameCamera.GetComponentInChildren<AttenuationTarget>();
       _beautifyComponent = _gameCamera.GetComponent<BeautifyEffect.Beautify>();
       _fogComponent = _gameCamera.GetComponent<VolumetricFogAndMist.VolumetricFog>();
@@ -219,6 +222,20 @@ namespace JKQScreenshotsToolMod.Helpers
     {
       get => !_fogComponent.enabled;
       set => _fogComponent.enabled = !value;
+    }
+
+    public bool AreFogArtifactsFixed
+    {
+      get => _fogComponent.downsampling == 0;
+      set
+      {
+        if (_fogComponent.downsampling != 0)
+        {
+          _defaultFogDownsampling = _fogComponent.downsampling;
+        }
+
+        _fogComponent.downsampling = (value) ? 0 : _defaultFogDownsampling;
+      }
     }
     #endregion
 

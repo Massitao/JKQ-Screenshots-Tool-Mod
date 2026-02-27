@@ -680,9 +680,11 @@ namespace JKQScreenshotsToolMod
     #region Inventory
     private void EnterInventoryView(InventoryCameraParams inventoryCameraParams)
     {
+      GUIHelper.OpenInventoryMenu();
+
       bool enteredAgain = _isInInventoryView;
       _isInInventoryView = true;
-
+   
       EnableFreecam(true);
       EnableFreecamPlayerInput(false);
 
@@ -800,15 +802,6 @@ namespace JKQScreenshotsToolMod
     {
       _toolMenu.TogglesView.SetHideGUIToggleState(hide);
     }
-
-    private void HideBackground(bool hide)
-    {
-      // TODO
-    }
-    private void HideTerrain(bool hide)
-    {
-      // TODO
-    }
     private void HidePlayers(bool hide)
     {
       GameHelper.HidePlayers(hide);
@@ -821,7 +814,8 @@ namespace JKQScreenshotsToolMod
     }
     private void HideNPCS(bool hide)
     {
-      // TODO
+      GameHelper.HideNPCs(hide);
+      _toolMenu.TogglesView.SetHideNPCSToggleState(hide);
     }
 
     private void DisableFog(bool disable)
@@ -844,10 +838,6 @@ namespace JKQScreenshotsToolMod
       CameraHelper.IsVignettingDisabled = disable;
       _toolMenu.TogglesView.SetDisableVignettingToggleState(disable);
     }
-    private void DisableWaterEffect(bool disable)
-    {
-      // TODO
-    }
     private void DisableSkybox(bool disable)
     {
       CameraHelper.IsSkyboxDisabled = disable;
@@ -862,7 +852,12 @@ namespace JKQScreenshotsToolMod
     private void ShowRealModels(bool show)
     {
       CameraHelper.IsShowingRealModels = show;
-      _toolMenu.TogglesView.SetEnableShowRealModelsToggleState(show);
+      _toolMenu.TogglesView.SetFixFogArtifactsToggleState(show);
+    }
+    private void FixFogArtifacts(bool fix)
+    {
+      CameraHelper.AreFogArtifactsFixed = fix;
+      _toolMenu.TogglesView.SetFixFogArtifactsToggleState(fix);
     }
 
 
@@ -870,8 +865,6 @@ namespace JKQScreenshotsToolMod
     {
       _toolMenu.TogglesView.OnHideGUIStateChanged += HideGUI;
       GUIHelper.OnUIInputPatchInputToggled += HideGUIInputToggle;
-      _toolMenu.TogglesView.OnHideBackgroundStateChanged += HideBackground;
-      _toolMenu.TogglesView.OnHideTerrainStateChanged += HideTerrain;
       _toolMenu.TogglesView.OnHidePlayersStateChanged += HidePlayers;
       _toolMenu.TogglesView.OnHideEnemiesStateChanged += HideEnemies;
       _toolMenu.TogglesView.OnHideNPCSStateChanged += HideNPCS;
@@ -880,18 +873,16 @@ namespace JKQScreenshotsToolMod
       _toolMenu.TogglesView.OnDisableParticlesStateChanged += DisableParticles;
       _toolMenu.TogglesView.OnDisableBloomStateChanged += DisableBloom;
       _toolMenu.TogglesView.OnDisableVignettingStateChanged += DisableVignetting;
-      _toolMenu.TogglesView.OnDisableWaterEffectStateChanged += DisableWaterEffect;
       _toolMenu.TogglesView.OnDisableSkyboxStateChanged += DisableSkybox;
 
       _toolMenu.TogglesView.OnEnablePointFilteringStateChanged += EnablePointFiltering;
       _toolMenu.TogglesView.OnShowRealModelsStateChanged += ShowRealModels;
+      _toolMenu.TogglesView.OnFixFogArtifactsStateChanged += FixFogArtifacts;
     }
     private void UnsubscribeTogglesEvents()
     {
       _toolMenu.TogglesView.OnHideGUIStateChanged -= HideGUI;
       GUIHelper.OnUIInputPatchInputToggled -= HideGUIInputToggle;
-      _toolMenu.TogglesView.OnHideBackgroundStateChanged -= HideBackground;
-      _toolMenu.TogglesView.OnHideTerrainStateChanged -= HideTerrain;
       _toolMenu.TogglesView.OnHidePlayersStateChanged -= HidePlayers;
       _toolMenu.TogglesView.OnHideEnemiesStateChanged -= HideEnemies;
       _toolMenu.TogglesView.OnHideNPCSStateChanged -= HideNPCS;
@@ -900,11 +891,11 @@ namespace JKQScreenshotsToolMod
       _toolMenu.TogglesView.OnDisableParticlesStateChanged -= DisableParticles;
       _toolMenu.TogglesView.OnDisableBloomStateChanged -= DisableBloom;
       _toolMenu.TogglesView.OnDisableVignettingStateChanged -= DisableVignetting;
-      _toolMenu.TogglesView.OnDisableWaterEffectStateChanged -= DisableWaterEffect;
       _toolMenu.TogglesView.OnDisableSkyboxStateChanged -= DisableSkybox;
 
       _toolMenu.TogglesView.OnEnablePointFilteringStateChanged -= EnablePointFiltering;
       _toolMenu.TogglesView.OnShowRealModelsStateChanged -= ShowRealModels;
+      _toolMenu.TogglesView.OnFixFogArtifactsStateChanged -= FixFogArtifacts;
     }
     #endregion
 
@@ -1172,17 +1163,5 @@ namespace JKQScreenshotsToolMod
     }
     #endregion
     #endregion
-
-
-    // TODO:
-    // ADD REMAINING TOGGLES (WATER EFFECT, FIX FOG ARTIFACTS, HIDE BACKGROUND (TOUGH), HIDE TERRAIN (VERY UNLIKELY), HIDE NPCS, DISABLE PARTICLES (IT BROKE))
-    // MAKE EXTRAS INPUT FIELDS SMALLER
-    // OPEN / CLOSE INVENTORY BUTTONS
-    // SUBSCRIBE TO ONMENUGUI.CHANGE TO PRESERVE SETTINGS (MAYBE?)
-    // MAKE PATCHES FOR TOGGLE PERMANENCY (MAYBE?)
-
-    // ONMENUGUI.CHANGE
-    // OPENING OR CLOSING A MENU SEEMS TO TRIGGER MANUALCAMERACONTROLLER'S HandleModeChanged METHOD
-    // TO PRESERVE IT, I WOULD PROBABLY NEED TO PATCH THE SCRIPT OR FIND THE CLASS THAT CALLS THE EVENT / METHOD
   }
 }

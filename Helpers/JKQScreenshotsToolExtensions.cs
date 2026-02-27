@@ -6,7 +6,21 @@ namespace JKQScreenshotsToolMod.Helpers
   {
     public static T FindObjectInRootPath<T>(this Transform transform, string path)
     {
-      return transform.root.Find(path).GetComponent<T>();
+      Transform foundTransform = transform.root.Find(path);
+      if (foundTransform == null)
+      {
+        JKQScreenshotsToolLogger.Error($"Path not found!! {path}");
+        return default;
+      }
+
+      T foundComponent = foundTransform.GetComponent<T>();
+      if (foundComponent == null)
+      {
+        JKQScreenshotsToolLogger.Error($"Component not found!! {path}");
+        return default;
+      }
+
+      return foundTransform.GetComponent<T>();
     }
   }
 }

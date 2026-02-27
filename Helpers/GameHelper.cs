@@ -1,7 +1,11 @@
-﻿using AraSamples;
+﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Nexile.JKQuest.SceneManagement;
+using HarmonyLib;
+using Nexile.JKQuest.UI.Dialogue;
 
 namespace JKQScreenshotsToolMod.Helpers
 {
@@ -14,7 +18,8 @@ namespace JKQScreenshotsToolMod.Helpers
     public static readonly string CoreScene = "CoreScene";
 
     // References
-    List<GameObject> coreSceneGameObjects = new List<GameObject>();
+    private List<GameObject> _coreSceneGameObjects = new List<GameObject>();
+    private List<GameObject> _cachedNPCsGameObjects = new List<GameObject>();
 
     private GameObject _particlePoolingGameObject = null;
     private GameObject _worldParticlesGameObject = null;
@@ -23,15 +28,18 @@ namespace JKQScreenshotsToolMod.Helpers
     private Light _mainLight = null;
     private Light _characterLight = null;
     private Light _extraLight = null;
+
+    private static readonly Type JKQSceneManagerTypeRef = typeof(Nexile.JKQuest.SceneManagement.SceneManager);
+    private static readonly FieldInfo JKQSceneManagerLoadedScenesFieldInfo = AccessTools.Field(JKQSceneManagerTypeRef, "loadedScenes");
     #endregion
 
 
     #region Initialization Methods
     public void Init()
     {
-      SceneManager.GetSceneByName(CoreScene).GetRootGameObjects(coreSceneGameObjects);
+      UnityEngine.SceneManagement.SceneManager.GetSceneByName(CoreScene).GetRootGameObjects(_coreSceneGameObjects);
 
-      foreach (GameObject go in coreSceneGameObjects)
+      foreach (GameObject go in _coreSceneGameObjects)
       {
         if (go.name == "LateLoad")
         {
@@ -54,9 +62,34 @@ namespace JKQScreenshotsToolMod.Helpers
       }
     }
 
+    private void GetParticleGameObjects()
+    {
+      if (_particlePoolingGameObject == null || _worldParticlesGameObject == null || _cloudShadowsGameObject == null)
+      {
+        UnityEngine.SceneManagement.SceneManager.GetSceneByName(CoreScene).GetRootGameObjects(_coreSceneGameObjects);
+
+        foreach (GameObject go in _coreSceneGameObjects)
+        {
+          if (go.name == "LateLoad")
+          {
+            _worldParticlesGameObject = go.transform.Find("Weather Effects").gameObject;
+            _cloudShadowsGameObject = go.transform.Find("Cloud Shadows").gameObject;
+
+            continue;
+          }
+
+          if (go.name == "Pooling")
+          {
+            _particlePoolingGameObject = go;
+            continue;
+          }
+        }
+      }
+    }
+
     public void Clear()
     {
-      coreSceneGameObjects.Clear();
+      _coreSceneGameObjects.Clear();
 
       _particlePoolingGameObject = null;
       _worldParticlesGameObject = null;
@@ -72,10 +105,10 @@ namespace JKQScreenshotsToolMod.Helpers
     #region Hide Methods
     public void HidePlayers(bool hide)
     {
-      coreSceneGameObjects.Clear();
-      SceneManager.GetSceneByName(CoreScene).GetRootGameObjects(coreSceneGameObjects);
+      _coreSceneGameObjects.Clear();
+      UnityEngine.SceneManagement.SceneManager.GetSceneByName(CoreScene).GetRootGameObjects(_coreSceneGameObjects);
 
-      foreach (GameObject go in coreSceneGameObjects)
+      foreach (GameObject go in _coreSceneGameObjects)
       {
         if (!go.name.StartsWith("JumpKingGlue")) continue;
 
@@ -94,10 +127,10 @@ namespace JKQScreenshotsToolMod.Helpers
     }
     public void HideEnemies(bool hide)
     {
-      coreSceneGameObjects.Clear();
-      SceneManager.GetSceneByName(CoreScene).GetRootGameObjects(coreSceneGameObjects);
+      _coreSceneGameObjects.Clear();
+      UnityEngine.SceneManagement.SceneManager.GetSceneByName(CoreScene).GetRootGameObjects(_coreSceneGameObjects);
 
-      foreach (GameObject go in coreSceneGameObjects)
+      foreach (GameObject go in _coreSceneGameObjects)
       {
         if (!go.name.Contains("Glue")) continue;
         if (go.name.StartsWith("JumpKingGlue")) continue;
@@ -112,6 +145,50 @@ namespace JKQScreenshotsToolMod.Helpers
         }
       }
     }
+    public void HideNPCs(bool hide)
+    {
+      if (!hide)
+      {
+        foreach (GameObject hiddenNPC in _cachedNPCsGameObjects)
+        {
+          if (hiddenNPC == null) continue;
+          hiddenNPC.gameObject.SetActive(true);
+        }
+
+        _cachedNPCsGameObjects.Clear();
+        return;
+      }
+
+
+      var loadedScenesInfo = (Dictionary<string, LoadedSceneInfo>)JKQSceneManagerLoadedScenesFieldInfo.GetValue(Nexile.JKQuest.SceneManagement.SceneManager.Instance);
+
+      foreach (LoadedSceneInfo loadedSceneInfo in loadedScenesInfo.Values)
+      {
+        string sceneName = string.Empty;
+        int index = loadedSceneInfo.Path.LastIndexOf('/');
+
+        sceneName = (index >= 0) ? loadedSceneInfo.Path.Substring(index + 1) : loadedSceneInfo.Path;
+        if (sceneName.EndsWith(".unity")) sceneName = sceneName.Substring(0, sceneName.Length - 6);
+
+        Scene loadedScene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(sceneName);
+        if (!loadedScene.IsValid()) continue;
+
+
+        List<GameObject> sceneGO = new List<GameObject>();
+        loadedScene.GetRootGameObjects(sceneGO);
+
+        foreach (GameObject go in sceneGO)
+        {
+          NPCDialogue[] npcsFound = go.GetComponentsInChildren<NPCDialogue>(false);
+
+          foreach (NPCDialogue npc in npcsFound)
+          {
+            _cachedNPCsGameObjects.Add(npc.gameObject);
+            npc.gameObject.SetActive(false);
+          }
+        }
+      }
+    }
     #endregion
 
     #region Disable Methods
@@ -119,34 +196,15 @@ namespace JKQScreenshotsToolMod.Helpers
     {
       get
       {
-        if (_particlePoolingGameObject == null || _worldParticlesGameObject == null || _cloudShadowsGameObject == null)
-        {
-          SceneManager.GetSceneByName(CoreScene).GetRootGameObjects(coreSceneGameObjects);
-
-          foreach (GameObject go in coreSceneGameObjects)
-          {
-            if (go.name == "LateLoad")
-            {
-              _worldParticlesGameObject = go.transform.Find("Weather Effects").gameObject;
-              _cloudShadowsGameObject = go.transform.Find("Cloud Shadows").gameObject;
-
-              continue;
-            }
-
-            if (go.name == "Pooling")
-            {
-              _particlePoolingGameObject = go;
-              continue;
-            }
-          }
-        }
+        GetParticleGameObjects();
 
         if (_particlePoolingGameObject == null || _worldParticlesGameObject == null || _cloudShadowsGameObject == null) return false;
-
         return !_particlePoolingGameObject.activeSelf;
       }
       set
       {
+        GetParticleGameObjects();
+
         if (_particlePoolingGameObject == null || _worldParticlesGameObject == null || _cloudShadowsGameObject == null) return;
 
         _particlePoolingGameObject.SetActive(!value);

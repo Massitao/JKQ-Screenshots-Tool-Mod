@@ -93,8 +93,6 @@ namespace JKQScreenshotsToolMod.UI
 
     // Toggles View Components
     public Toggle Toggles_HideGUI;
-    public Toggle Toggles_HideBackground;
-    public Toggle Toggles_HideTerrain;
     public Toggle Toggles_HidePlayers;
     public Toggle Toggles_HideEnemies;
     public Toggle Toggles_HideNPCS;
@@ -103,11 +101,11 @@ namespace JKQScreenshotsToolMod.UI
     public Toggle Toggles_DisableParticles;
     public Toggle Toggles_DisableBloom;
     public Toggle Toggles_DisableVignetting;
-    public Toggle Toggles_DisableWaterEffect;
     public Toggle Toggles_DisableSkybox;
 
     public Toggle Toggles_PointFiltering;
     public Toggle Toggles_ShowRealModels;
+    public Toggle Toggles_FixFogArtifacts;
 
 
     // Extras View Components
@@ -251,8 +249,6 @@ namespace JKQScreenshotsToolMod.UI
       const string togglesViewToggleGroupPath = togglesViewPath + "ToggleGroup/";
 
       Toggles_HideGUI = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "HideGUI/Toggle");
-      Toggles_HideBackground = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "HideBackground/Toggle");
-      Toggles_HideTerrain = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "HideTerrain/Toggle");
       Toggles_HidePlayers = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "HidePlayer/Toggle");
       Toggles_HideEnemies = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "HideEnemy/Toggle");
       Toggles_HideNPCS = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "HideNPC/Toggle");
@@ -261,11 +257,11 @@ namespace JKQScreenshotsToolMod.UI
       Toggles_DisableParticles = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "DisableParticles/Toggle");
       Toggles_DisableBloom = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "DisableBloom/Toggle");
       Toggles_DisableVignetting = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "DisableVignetting/Toggle");
-      Toggles_DisableWaterEffect = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "DisableWaterEffect/Toggle");
       Toggles_DisableSkybox = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "DisableSkybox/Toggle");
 
       Toggles_PointFiltering = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "SetPointFilterMode/Toggle");
       Toggles_ShowRealModels = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "ShowRealModels/Toggle");
+      Toggles_FixFogArtifacts = transform.FindObjectInRootPath<Toggle>(togglesViewToggleGroupPath + "FixFogArtifacts/Toggle");
 
 
       // Extras View

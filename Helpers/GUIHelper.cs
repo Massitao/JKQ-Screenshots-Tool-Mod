@@ -2,6 +2,7 @@
 using UnityEngine;
 using Nexile.JKQuest;
 using JKQScreenshotsToolMod.Patches;
+using UnityEngine.UI;
 
 namespace JKQScreenshotsToolMod.Helpers
 {
@@ -12,6 +13,9 @@ namespace JKQScreenshotsToolMod.Helpers
     private CanvasGroup _gameGUICanvasGroup;
     private MenuGUI _menuGUI;
 
+    // References
+    private Tuple<Texture, Material> _backdropMaterial;
+    private Tuple<Texture, Texture> _toggleTextures;
 
     // Events
     public event Action OnMenuGUIMenuChanged;
@@ -41,11 +45,44 @@ namespace JKQScreenshotsToolMod.Helpers
     #endregion
 
 
+    #region UI Element Getters
+    public Tuple<Texture, Material> GetUIBackdropMaterial()
+    {
+      if (_backdropMaterial != null) return _backdropMaterial;
+
+      Image backdrop = _menuGUI.transform.Find("Content/Canvas Options/Margin/Options/Backdrop").GetComponent<Image>();
+      if (backdrop == null) return null;
+
+      return _backdropMaterial = Tuple.Create<Texture, Material>(backdrop.mainTexture, backdrop.material);
+    }
+
+    public Tuple<Texture, Texture> GetUIToggleTextures()
+    {
+      string togglePath = "Content/Canvas Options/Margin/Options/Margin/Options List/Scroll View/Viewport/Options/Gameplay/Gamepad Rumble/ToggleConsoleUGUI (Controller Vibration)/Toggle";
+      Image toggle = _menuGUI.transform.Find(togglePath).GetComponent<Image>();
+      if (toggle == null) return null;
+
+      Image toggleCheckmark = toggle.transform.Find("Checkmark").GetComponent<Image>();
+
+
+      return _toggleTextures = Tuple.Create<Texture, Texture>(toggle.mainTexture, toggleCheckmark.mainTexture);
+    }
+
+
+    #endregion
+
+
     #region GUI State Methods
     public void SetGameGUIInvisibility(bool invisible)
     {
       _gameGUICanvasGroup.alpha = (invisible) ? 0f : 1f;
       UIToggle.UIDisabld = invisible;
+    }
+
+    public void OpenInventoryMenu()
+    {
+      if (_menuGUI.CurrentMenu == MenuGUI.Menu.Inventory) return;
+      _menuGUI.TrySetMenu(MenuGUI.Menu.Inventory);
     }
 
     private void MenuGUIOnMenuChanged(MenuGUI.Menu old, MenuGUI.Menu current)
