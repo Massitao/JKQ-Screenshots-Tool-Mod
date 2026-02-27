@@ -1,41 +1,51 @@
-﻿using System;
+﻿using JKQScreenshotsToolMod.Enums;
+using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace JKQScreenshotsToolMod.UI
 {
   public class ToolMenuExtrasView
   {
-    private ToolMenuComponents _toolMenuComponents;
+    private readonly ToolMenuComponents _toolMenuComponents;
 
     private Color _lastValidSkyboxColor = Color.black;
-    public event Action<float> OnSkyboxColorRedValueChanged = null;
-    public event Action<float> OnSkyboxColorGreenValueChanged = null;
-    public event Action<float> OnSkyboxColorBlueValueChanged = null;
+    public event Action<float> OnSkyboxColorRedValueChanged;
+    public event Action<float> OnSkyboxColorGreenValueChanged;
+    public event Action<float> OnSkyboxColorBlueValueChanged;
+
+    private Color _lastValidFogColor = Color.black;
+    private float _lastValidFogDensity = 1f;
+    public event Action<float> OnFogColorRedValueChanged;
+    public event Action<float> OnFogColorGreenValueChanged;
+    public event Action<float> OnFogColorBlueValueChanged;
+    public event Action<float> OnFogDensityValueChanged;
 
     private Color _lastValidMainLightingColor = Color.black;
     private Vector3 _lastValidMainLightingRotation = Vector3.zero;
     private float _lastValidMainLightingIntensity = 1f;
-    public event Action<float> OnMainLightingColorRedValueChanged = null;
-    public event Action<float> OnMainLightingColorGreenValueChanged = null;
-    public event Action<float> OnMainLightingColorBlueValueChanged = null;
-    public event Action<float> OnMainLightingRotationXValueChanged = null;
-    public event Action<float> OnMainLightingRotationYValueChanged = null;
-    public event Action<float> OnMainLightingRotationZValueChanged = null;
-    public event Action<float> OnMainLightingIntensityValueChanged = null;
+    public event Action<float> OnMainLightingColorRedValueChanged;
+    public event Action<float> OnMainLightingColorGreenValueChanged;
+    public event Action<float> OnMainLightingColorBlueValueChanged;
+    public event Action<float> OnMainLightingRotationXValueChanged;
+    public event Action<float> OnMainLightingRotationYValueChanged;
+    public event Action<float> OnMainLightingRotationZValueChanged;
+    public event Action<float> OnMainLightingIntensityValueChanged;
 
     private Color _lastValidCharacterLightingColor = Color.black;
     private float _lastValidCharacterLightingIntensity = 1f;
-    public event Action<float> OnCharacterLightingColorRedValueChanged = null;
-    public event Action<float> OnCharacterLightingColorGreenValueChanged = null;
-    public event Action<float> OnCharacterLightingColorBlueValueChanged = null;
-    public event Action<float> OnCharacterLightingIntensityValueChanged = null;
+    public event Action<float> OnCharacterLightingColorRedValueChanged;
+    public event Action<float> OnCharacterLightingColorGreenValueChanged;
+    public event Action<float> OnCharacterLightingColorBlueValueChanged;
+    public event Action<float> OnCharacterLightingIntensityValueChanged;
 
     private Color _lastValidExtraLightingColor = Color.black;
     private float _lastValidExtraLightingIntensity = 1f;
-    public event Action<float> OnExtraLightingColorRedValueChanged = null;
-    public event Action<float> OnExtraLightingColorGreenValueChanged = null;
-    public event Action<float> OnExtraLightingColorBlueValueChanged = null;
-    public event Action<float> OnExtraLightingIntensityValueChanged = null;
+    public event Action<float> OnExtraLightingColorRedValueChanged;
+    public event Action<float> OnExtraLightingColorGreenValueChanged;
+    public event Action<float> OnExtraLightingColorBlueValueChanged;
+    public event Action<float> OnExtraLightingIntensityValueChanged;
 
 
     private ToolMenuExtrasView() { }
@@ -49,6 +59,11 @@ namespace JKQScreenshotsToolMod.UI
       _toolMenuComponents.Extras_SkyboxColor_Red.onEndEdit.AddListener(SkyboxColorRedValueChanged);
       _toolMenuComponents.Extras_SkyboxColor_Green.onEndEdit.AddListener(SkyboxColorGreenValueChanged);
       _toolMenuComponents.Extras_SkyboxColor_Blue.onEndEdit.AddListener(SkyboxColorBlueValueChanged);
+
+      _toolMenuComponents.Extras_FogColor_Red.onEndEdit.AddListener(FogColorRedValueChanged);
+      _toolMenuComponents.Extras_FogColor_Green.onEndEdit.AddListener(FogColorGreenValueChanged);
+      _toolMenuComponents.Extras_FogColor_Blue.onEndEdit.AddListener(FogColorBlueValueChanged);
+      _toolMenuComponents.Extras_FogDensity.onEndEdit.AddListener(FogDensityValueChanged);
 
       _toolMenuComponents.Extras_MainLightingColor_Red.onEndEdit.AddListener(MainLightingColorRedValueChanged);
       _toolMenuComponents.Extras_MainLightingColor_Green.onEndEdit.AddListener(MainLightingColorGreenValueChanged);
@@ -74,6 +89,11 @@ namespace JKQScreenshotsToolMod.UI
       _toolMenuComponents.Extras_SkyboxColor_Green.onEndEdit.RemoveListener(SkyboxColorGreenValueChanged);
       _toolMenuComponents.Extras_SkyboxColor_Blue.onEndEdit.RemoveListener(SkyboxColorBlueValueChanged);
 
+      _toolMenuComponents.Extras_FogColor_Red.onEndEdit.RemoveListener(FogColorRedValueChanged);
+      _toolMenuComponents.Extras_FogColor_Green.onEndEdit.RemoveListener(FogColorGreenValueChanged);
+      _toolMenuComponents.Extras_FogColor_Blue.onEndEdit.RemoveListener(FogColorBlueValueChanged);
+      _toolMenuComponents.Extras_FogDensity.onEndEdit.RemoveListener(FogDensityValueChanged);
+
       _toolMenuComponents.Extras_MainLightingColor_Red.onEndEdit.RemoveListener(MainLightingColorRedValueChanged);
       _toolMenuComponents.Extras_MainLightingColor_Green.onEndEdit.RemoveListener(MainLightingColorGreenValueChanged);
       _toolMenuComponents.Extras_MainLightingColor_Blue.onEndEdit.RemoveListener(MainLightingColorBlueValueChanged);
@@ -94,115 +114,253 @@ namespace JKQScreenshotsToolMod.UI
     }
 
 
+
     #region Skybox
     private void SkyboxColorRedValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidSkyboxColor.r, OnSkyboxColorRedValueChanged, SetSkyboxColorRedValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidSkyboxColor.r,
+        onValidValuePassed: OnSkyboxColorRedValueChanged,
+        onInvalidValuePassed: SetSkyboxColorRedValue
+        );
     }
     private void SetSkyboxColorRedValue(float redColor)
     {
-      _toolMenuComponents.Extras_SkyboxColor_Red.SetTextWithoutNotify(redColor.ToString("0.00"));
-      _lastValidSkyboxColor.r = redColor;
-      _lastValidSkyboxColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_SkyboxColorPreview, _lastValidSkyboxColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Red,
+        value: redColor,
+        lastValidColor: ref _lastValidSkyboxColor,
+        inputField: _toolMenuComponents.Extras_SkyboxColor_Red,
+        preview: _toolMenuComponents.Extras_SkyboxColorPreview
+        );
     }
 
     private void SkyboxColorGreenValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidSkyboxColor.g, OnSkyboxColorGreenValueChanged, SetSkyboxColorGreenValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidSkyboxColor.g,
+        onValidValuePassed: OnSkyboxColorGreenValueChanged,
+        onInvalidValuePassed: SetSkyboxColorGreenValue
+        );
     }
     private void SetSkyboxColorGreenValue(float greenColor)
     {
-      _toolMenuComponents.Extras_SkyboxColor_Green.SetTextWithoutNotify(greenColor.ToString("0.00"));
-      _lastValidSkyboxColor.g = greenColor;
-      _lastValidSkyboxColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_SkyboxColorPreview, _lastValidSkyboxColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Green,
+        value: greenColor,
+        lastValidColor: ref _lastValidSkyboxColor,
+        inputField: _toolMenuComponents.Extras_SkyboxColor_Green,
+        preview: _toolMenuComponents.Extras_SkyboxColorPreview
+        );
     }
 
     private void SkyboxColorBlueValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidSkyboxColor.b, OnSkyboxColorBlueValueChanged, SetSkyboxColorBlueValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidSkyboxColor.b,
+        onValidValuePassed: OnSkyboxColorBlueValueChanged,
+        onInvalidValuePassed: SetSkyboxColorBlueValue
+        );
     }
     private void SetSkyboxColorBlueValue(float blueColor)
     {
-      _toolMenuComponents.Extras_SkyboxColor_Blue.SetTextWithoutNotify(blueColor.ToString("0.00"));
-      _lastValidSkyboxColor.b = blueColor;
-      _lastValidSkyboxColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_SkyboxColorPreview, _lastValidSkyboxColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Blue,
+        value: blueColor,
+        lastValidColor: ref _lastValidSkyboxColor,
+        inputField: _toolMenuComponents.Extras_SkyboxColor_Blue,
+        preview: _toolMenuComponents.Extras_SkyboxColorPreview
+        );
     }
 
     public void SetSkyboxColorValue(Color color)
     {
-      _toolMenuComponents.Extras_SkyboxColor_Red.SetTextWithoutNotify(color.r.ToString("0.00"));
-      _toolMenuComponents.Extras_SkyboxColor_Green.SetTextWithoutNotify(color.g.ToString("0.00"));
-      _toolMenuComponents.Extras_SkyboxColor_Blue.SetTextWithoutNotify(color.b.ToString("0.00"));
+      ToolMenuHelper.UpdateColorInputFields(
+        value: color,
+        lastValidColor: ref _lastValidSkyboxColor,
+        redIF: _toolMenuComponents.Extras_SkyboxColor_Red,
+        greenIF: _toolMenuComponents.Extras_SkyboxColor_Green,
+        blueIF: _toolMenuComponents.Extras_SkyboxColor_Blue,
+        preview: _toolMenuComponents.Extras_SkyboxColorPreview
+        );
+    }
+    #endregion
 
-      _lastValidSkyboxColor = color;
-      _lastValidSkyboxColor.a = 1f;
+    #region Fog
+    private void FogColorRedValueChanged(string value)
+    {
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidFogColor.r,
+        onValidValuePassed: OnFogColorRedValueChanged,
+        onInvalidValuePassed: SetFogColorRedValue
+        );
+    }
+    private void SetFogColorRedValue(float redColor)
+    {
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Red,
+        value: redColor,
+        lastValidColor: ref _lastValidFogColor,
+        inputField: _toolMenuComponents.Extras_FogColor_Red,
+        preview: _toolMenuComponents.Extras_FogColorPreview
+        );
+    }
 
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_SkyboxColorPreview, _lastValidSkyboxColor);
+    private void FogColorGreenValueChanged(string value)
+    {
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidFogColor.g,
+        onValidValuePassed: OnFogColorGreenValueChanged,
+        onInvalidValuePassed: SetFogColorGreenValue
+        );
+    }
+    private void SetFogColorGreenValue(float greenColor)
+    {
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Green,
+        value: greenColor,
+        lastValidColor: ref _lastValidFogColor,
+        inputField: _toolMenuComponents.Extras_FogColor_Green,
+        preview: _toolMenuComponents.Extras_FogColorPreview
+        );
+    }
+
+    private void FogColorBlueValueChanged(string value)
+    {
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidFogColor.b,
+        onValidValuePassed: OnFogColorBlueValueChanged,
+        onInvalidValuePassed: SetFogColorBlueValue
+        );
+    }
+    private void SetFogColorBlueValue(float blueColor)
+    {
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Blue,
+        value: blueColor,
+        lastValidColor: ref _lastValidFogColor,
+        inputField: _toolMenuComponents.Extras_FogColor_Blue,
+        preview: _toolMenuComponents.Extras_FogColorPreview
+        );
+    }
+
+    public void SetFogColorValue(Color color)
+    {
+      ToolMenuHelper.UpdateColorInputFields(
+        value: color,
+        lastValidColor: ref _lastValidFogColor,
+        redIF: _toolMenuComponents.Extras_FogColor_Red,
+        greenIF: _toolMenuComponents.Extras_FogColor_Green,
+        blueIF: _toolMenuComponents.Extras_FogColor_Blue,
+        preview: _toolMenuComponents.Extras_FogColorPreview
+        );
+    }
+
+
+    private void FogDensityValueChanged(string value)
+    {
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidFogDensity,
+        onValidValuePassed: OnFogDensityValueChanged,
+        onInvalidValuePassed: SetFogDensityValue
+        );
+    }
+    public void SetFogDensityValue(float intensity)
+    {
+      _toolMenuComponents.Extras_FogDensity.SetTextWithoutNotify(intensity.ToString("0.00"));
+      _lastValidFogDensity = intensity;
     }
     #endregion
 
     #region Main Lighting
     private void MainLightingColorRedValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidMainLightingColor.r, OnMainLightingColorRedValueChanged, SetMainLightingColorRedValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidMainLightingColor.r,
+        onValidValuePassed: OnMainLightingColorRedValueChanged,
+        onInvalidValuePassed: SetMainLightingColorRedValue
+        );
     }
     private void SetMainLightingColorRedValue(float redColor)
     {
-      _toolMenuComponents.Extras_MainLightingColor_Red.SetTextWithoutNotify(redColor.ToString("0.00"));
-      _lastValidMainLightingColor.r = redColor;
-      _lastValidMainLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_MainLightingColorPreview, _lastValidMainLightingColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Red,
+        value: redColor,
+        lastValidColor: ref _lastValidMainLightingColor,
+        inputField: _toolMenuComponents.Extras_MainLightingColor_Red,
+        preview: _toolMenuComponents.Extras_MainLightingColorPreview
+        );
     }
 
     private void MainLightingColorGreenValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidMainLightingColor.g, OnMainLightingColorGreenValueChanged, SetMainLightingColorGreenValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidMainLightingColor.g,
+        onValidValuePassed: OnMainLightingColorGreenValueChanged,
+        onInvalidValuePassed: SetMainLightingColorGreenValue
+        );
     }
     private void SetMainLightingColorGreenValue(float greenColor)
     {
-      _toolMenuComponents.Extras_MainLightingColor_Green.SetTextWithoutNotify(greenColor.ToString("0.00"));
-      _lastValidMainLightingColor.g = greenColor;
-      _lastValidMainLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_MainLightingColorPreview, _lastValidMainLightingColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Green,
+        value: greenColor,
+        lastValidColor: ref _lastValidMainLightingColor,
+        inputField: _toolMenuComponents.Extras_MainLightingColor_Green,
+        preview: _toolMenuComponents.Extras_MainLightingColorPreview
+        );
     }
 
     private void MainLightingColorBlueValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidMainLightingColor.b, OnMainLightingColorBlueValueChanged, SetMainLightingColorBlueValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidMainLightingColor.b,
+        onValidValuePassed: OnMainLightingColorBlueValueChanged,
+        onInvalidValuePassed: SetMainLightingColorBlueValue
+        );
     }
     private void SetMainLightingColorBlueValue(float blueColor)
     {
-      _toolMenuComponents.Extras_SkyboxColor_Blue.SetTextWithoutNotify(blueColor.ToString("0.00"));
-      _lastValidSkyboxColor.b = blueColor;
-      _lastValidMainLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_SkyboxColorPreview, _lastValidSkyboxColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Blue,
+        value: blueColor,
+        lastValidColor: ref _lastValidMainLightingColor,
+        inputField: _toolMenuComponents.Extras_MainLightingColor_Blue,
+        preview: _toolMenuComponents.Extras_MainLightingColorPreview
+        );
     }
 
     public void SetMainLightingColorValue(Color color)
     {
-      _toolMenuComponents.Extras_MainLightingColor_Red.SetTextWithoutNotify(color.r.ToString("0.00"));
-      _toolMenuComponents.Extras_MainLightingColor_Green.SetTextWithoutNotify(color.g.ToString("0.00"));
-      _toolMenuComponents.Extras_MainLightingColor_Blue.SetTextWithoutNotify(color.b.ToString("0.00"));
-
-      _lastValidMainLightingColor = color;
-      _lastValidMainLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_MainLightingColorPreview, _lastValidMainLightingColor);
+      ToolMenuHelper.UpdateColorInputFields(
+        value: color,
+        lastValidColor: ref _lastValidMainLightingColor,
+        redIF: _toolMenuComponents.Extras_MainLightingColor_Red,
+        greenIF: _toolMenuComponents.Extras_MainLightingColor_Green,
+        blueIF: _toolMenuComponents.Extras_MainLightingColor_Blue,
+        preview: _toolMenuComponents.Extras_MainLightingColorPreview
+        );
     }
 
 
     private void MainLightingRotationXValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidMainLightingRotation.x, OnMainLightingRotationXValueChanged, SetMainLightingRotationXValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidMainLightingRotation.x,
+        onValidValuePassed: OnMainLightingRotationXValueChanged,
+        onInvalidValuePassed: SetMainLightingRotationXValue
+        );
     }
     private void SetMainLightingRotationXValue(float x)
     {
@@ -212,22 +370,32 @@ namespace JKQScreenshotsToolMod.UI
 
     private void MainLightingRotationYValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidMainLightingRotation.y, OnMainLightingRotationYValueChanged, SetMainLightingRotationYValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidMainLightingRotation.y,
+        onValidValuePassed: OnMainLightingRotationYValueChanged,
+        onInvalidValuePassed: SetMainLightingRotationYValue
+        );
     }
     private void SetMainLightingRotationYValue(float y)
     {
       _toolMenuComponents.Extras_MainLightingRotation_Y.SetTextWithoutNotify(y.ToString("0.00"));
-      _lastValidMainLightingRotation.x = y;
+      _lastValidMainLightingRotation.y = y;
     }
 
     private void MainLightingRotationZValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidMainLightingRotation.z, OnMainLightingRotationZValueChanged, SetMainLightingRotationZValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidMainLightingRotation.z,
+        onValidValuePassed: OnMainLightingRotationZValueChanged,
+        onInvalidValuePassed: SetMainLightingRotationZValue
+        );
     }
     private void SetMainLightingRotationZValue(float z)
     {
       _toolMenuComponents.Extras_MainLightingRotation_Z.SetTextWithoutNotify(z.ToString("0.00"));
-      _lastValidMainLightingRotation.x = z;
+      _lastValidMainLightingRotation.z = z;
     }
 
     public void SetMainLightingRotationValue(Vector3 rotationInEuler)
@@ -242,7 +410,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void MainLightingIntensityValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidMainLightingIntensity, OnMainLightingIntensityValueChanged, SetMainLightingIntensityValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidMainLightingIntensity,
+        onValidValuePassed: OnMainLightingIntensityValueChanged,
+        onInvalidValuePassed: SetMainLightingIntensityValue
+        );
     }
     public void SetMainLightingIntensityValue(float intensity)
     {
@@ -254,59 +427,85 @@ namespace JKQScreenshotsToolMod.UI
     #region Character Lighting
     private void CharacterLightingColorRedValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidCharacterLightingColor.r, OnCharacterLightingColorRedValueChanged, SetCharacterLightingColorRedValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidCharacterLightingColor.r,
+        onValidValuePassed: OnCharacterLightingColorRedValueChanged,
+        onInvalidValuePassed: SetCharacterLightingColorRedValue
+        );
     }
     private void SetCharacterLightingColorRedValue(float redColor)
     {
-      _toolMenuComponents.Extras_CharacterLightingColor_Red.SetTextWithoutNotify(redColor.ToString("0.00"));
-      _lastValidCharacterLightingColor.r = redColor;
-      _lastValidCharacterLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_CharacterLightingColorPreview, _lastValidCharacterLightingColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Red,
+        value: redColor,
+        lastValidColor: ref _lastValidCharacterLightingColor,
+        inputField: _toolMenuComponents.Extras_CharacterLightingColor_Red,
+        preview: _toolMenuComponents.Extras_CharacterLightingColorPreview
+        );
     }
 
     private void CharacterLightingColorGreenValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidCharacterLightingColor.g, OnCharacterLightingColorGreenValueChanged, SetCharacterLightingColorGreenValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidCharacterLightingColor.g,
+        onValidValuePassed: OnCharacterLightingColorGreenValueChanged,
+        onInvalidValuePassed: SetCharacterLightingColorGreenValue
+        );
     }
     private void SetCharacterLightingColorGreenValue(float greenColor)
     {
-      _toolMenuComponents.Extras_CharacterLightingColor_Green.SetTextWithoutNotify(greenColor.ToString("0.00"));
-      _lastValidCharacterLightingColor.g = greenColor;
-      _lastValidCharacterLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_CharacterLightingColorPreview, _lastValidCharacterLightingColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Green,
+        value: greenColor,
+        lastValidColor: ref _lastValidCharacterLightingColor,
+        inputField: _toolMenuComponents.Extras_CharacterLightingColor_Green,
+        preview: _toolMenuComponents.Extras_CharacterLightingColorPreview
+        );
     }
 
     private void CharacterLightingColorBlueValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidCharacterLightingColor.b, OnCharacterLightingColorBlueValueChanged, SetCharacterLightingColorBlueValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidCharacterLightingColor.b,
+        onValidValuePassed: OnCharacterLightingColorBlueValueChanged,
+        onInvalidValuePassed: SetCharacterLightingColorBlueValue
+        );
     }
     private void SetCharacterLightingColorBlueValue(float blueColor)
     {
-      _toolMenuComponents.Extras_SkyboxColor_Blue.SetTextWithoutNotify(blueColor.ToString("0.00"));
-      _lastValidSkyboxColor.b = blueColor;
-      _lastValidCharacterLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_SkyboxColorPreview, _lastValidSkyboxColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Blue,
+        value: blueColor,
+        lastValidColor: ref _lastValidCharacterLightingColor,
+        inputField: _toolMenuComponents.Extras_CharacterLightingColor_Blue,
+        preview: _toolMenuComponents.Extras_CharacterLightingColorPreview
+        );
     }
-    
+
     public void SetCharacterLightingColorValue(Color color)
     {
-      _toolMenuComponents.Extras_CharacterLightingColor_Red.SetTextWithoutNotify(color.r.ToString("0.00"));
-      _toolMenuComponents.Extras_CharacterLightingColor_Green.SetTextWithoutNotify(color.g.ToString("0.00"));
-      _toolMenuComponents.Extras_CharacterLightingColor_Blue.SetTextWithoutNotify(color.b.ToString("0.00"));
-
-      _lastValidCharacterLightingColor = color;
-      _lastValidCharacterLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_CharacterLightingColorPreview, _lastValidCharacterLightingColor);
+      ToolMenuHelper.UpdateColorInputFields(
+        value: color,
+        lastValidColor: ref _lastValidCharacterLightingColor,
+        redIF: _toolMenuComponents.Extras_CharacterLightingColor_Red,
+        greenIF: _toolMenuComponents.Extras_CharacterLightingColor_Green,
+        blueIF: _toolMenuComponents.Extras_CharacterLightingColor_Blue,
+        preview: _toolMenuComponents.Extras_CharacterLightingColorPreview
+        );
     }
-    
+
 
     private void CharacterLightingIntensityValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidCharacterLightingIntensity, OnCharacterLightingIntensityValueChanged, SetCharacterLightingIntensityValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidCharacterLightingIntensity,
+        onValidValuePassed: OnCharacterLightingIntensityValueChanged,
+        onInvalidValuePassed: SetCharacterLightingIntensityValue
+        );
     }
     public void SetCharacterLightingIntensityValue(float intensity)
     {
@@ -318,59 +517,85 @@ namespace JKQScreenshotsToolMod.UI
     #region Extra Lighting
     private void ExtraLightingColorRedValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidExtraLightingColor.r, OnExtraLightingColorRedValueChanged, SetExtraLightingColorRedValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidExtraLightingColor.r,
+        onValidValuePassed: OnExtraLightingColorRedValueChanged,
+        onInvalidValuePassed: SetExtraLightingColorRedValue
+        );
     }
     private void SetExtraLightingColorRedValue(float redColor)
     {
-      _toolMenuComponents.Extras_ExtraLightingColor_Red.SetTextWithoutNotify(redColor.ToString("0.00"));
-      _lastValidExtraLightingColor.r = redColor;
-      _lastValidExtraLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_ExtraLightingColorPreview, _lastValidExtraLightingColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Red,
+        value: redColor,
+        lastValidColor: ref _lastValidExtraLightingColor,
+        inputField: _toolMenuComponents.Extras_ExtraLightingColor_Red,
+        preview: _toolMenuComponents.Extras_ExtraLightingColorPreview
+        );
     }
 
     private void ExtraLightingColorGreenValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidExtraLightingColor.g, OnExtraLightingColorGreenValueChanged, SetExtraLightingColorGreenValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidExtraLightingColor.g,
+        onValidValuePassed: OnExtraLightingColorGreenValueChanged,
+        onInvalidValuePassed: SetExtraLightingColorGreenValue
+        );
     }
     private void SetExtraLightingColorGreenValue(float greenColor)
     {
-      _toolMenuComponents.Extras_ExtraLightingColor_Green.SetTextWithoutNotify(greenColor.ToString("0.00"));
-      _lastValidExtraLightingColor.g = greenColor;
-      _lastValidExtraLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_ExtraLightingColorPreview, _lastValidExtraLightingColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Green,
+        value: greenColor,
+        lastValidColor: ref _lastValidExtraLightingColor,
+        inputField: _toolMenuComponents.Extras_ExtraLightingColor_Green,
+        preview: _toolMenuComponents.Extras_ExtraLightingColorPreview
+        );
     }
 
     private void ExtraLightingColorBlueValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidExtraLightingColor.b, OnExtraLightingColorBlueValueChanged, SetExtraLightingColorBlueValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidExtraLightingColor.b,
+        onValidValuePassed: OnExtraLightingColorBlueValueChanged,
+        onInvalidValuePassed: SetExtraLightingColorBlueValue
+        );
     }
     private void SetExtraLightingColorBlueValue(float blueColor)
     {
-      _toolMenuComponents.Extras_SkyboxColor_Blue.SetTextWithoutNotify(blueColor.ToString("0.00"));
-      _lastValidSkyboxColor.b = blueColor;
-      _lastValidExtraLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_SkyboxColorPreview, _lastValidSkyboxColor);
+      ToolMenuHelper.UpdateColorChannelInputField(
+        colorChannel: ColorChannels.Blue,
+        value: blueColor,
+        lastValidColor: ref _lastValidExtraLightingColor,
+        inputField: _toolMenuComponents.Extras_ExtraLightingColor_Blue,
+        preview: _toolMenuComponents.Extras_ExtraLightingColorPreview
+        );
     }
 
     public void SetExtraLightingColorValue(Color color)
     {
-      _toolMenuComponents.Extras_ExtraLightingColor_Red.SetTextWithoutNotify(color.r.ToString("0.00"));
-      _toolMenuComponents.Extras_ExtraLightingColor_Green.SetTextWithoutNotify(color.g.ToString("0.00"));
-      _toolMenuComponents.Extras_ExtraLightingColor_Blue.SetTextWithoutNotify(color.b.ToString("0.00"));
-
-      _lastValidExtraLightingColor = color;
-      _lastValidExtraLightingColor.a = 1f;
-
-      ToolMenuHelper.UpdateColorPreview(_toolMenuComponents.Extras_ExtraLightingColorPreview, _lastValidExtraLightingColor);
+      ToolMenuHelper.UpdateColorInputFields(
+        value: color,
+        lastValidColor: ref _lastValidExtraLightingColor,
+        redIF: _toolMenuComponents.Extras_ExtraLightingColor_Red,
+        greenIF: _toolMenuComponents.Extras_ExtraLightingColor_Green,
+        blueIF: _toolMenuComponents.Extras_ExtraLightingColor_Blue,
+        preview: _toolMenuComponents.Extras_ExtraLightingColorPreview
+        );
     }
 
 
     private void ExtraLightingIntensityValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidExtraLightingIntensity, OnExtraLightingIntensityValueChanged, SetExtraLightingIntensityValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidExtraLightingIntensity,
+        onValidValuePassed: OnExtraLightingIntensityValueChanged,
+        onInvalidValuePassed: SetExtraLightingIntensityValue
+        );
     }
     public void SetExtraLightingIntensityValue(float intensity)
     {

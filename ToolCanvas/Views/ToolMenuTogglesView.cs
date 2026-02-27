@@ -4,23 +4,23 @@ namespace JKQScreenshotsToolMod.UI
 {
   public class ToolMenuTogglesView
   {
-    private ToolMenuComponents _toolMenuComponents;
+    private readonly ToolMenuComponents _toolMenuComponents;
 
-    public event Action<bool> OnHideGUIStateChanged = null;
-    public event Action<bool> OnHidePlayersStateChanged = null;
-    public event Action<bool> OnHideEnemiesStateChanged = null;
-    public event Action<bool> OnHideNPCSStateChanged = null;
+    public event Action<bool> OnHideGUIStateChanged;
+    public event Action<bool> OnHidePlayersStateChanged;
+    public event Action<bool> OnHideEnemiesStateChanged;
+    public event Action<bool> OnHideNPCSStateChanged;
 
-    public event Action<bool> OnDisableFogStateChanged = null;
-    public event Action<bool> OnDisableParticlesStateChanged = null;
-    public event Action<bool> OnDisableBloomStateChanged = null;
-    public event Action<bool> OnDisableVignettingStateChanged = null;
-    public event Action<bool> OnDisableWaterEffectStateChanged = null;
-    public event Action<bool> OnDisableSkyboxStateChanged = null;
+    public event Action<bool> OnDisableFogStateChanged;
+    public event Action<bool> OnDisableParticlesStateChanged;
+    public event Action<bool> OnDisableBloomStateChanged;
+    public event Action<bool> OnDisableVignettingStateChanged;
+    public event Action<bool> OnDisableWaterEffectStateChanged;
+    public event Action<bool> OnDisableSkyboxStateChanged;
 
-    public event Action<bool> OnEnablePointFilteringStateChanged = null;
-    public event Action<bool> OnShowRealModelsStateChanged = null;
-    public event Action<bool> OnFixFogArtifactsStateChanged = null;
+    public event Action<bool> OnEnablePointFilteringStateChanged;
+    public event Action<bool> OnShowRealModelsStateChanged;
+    public event Action<bool> OnFixFogArtifactsStateChanged;
 
 
     private ToolMenuTogglesView() { }

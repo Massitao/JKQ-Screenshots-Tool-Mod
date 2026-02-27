@@ -5,7 +5,7 @@ namespace JKQScreenshotsToolMod.UI
 {
   public class ToolMenuMapToolView
   {
-    private ToolMenuComponents _toolMenuComponents;
+    private readonly ToolMenuComponents _toolMenuComponents;
 
     private float _lastValidNegativeLimitXValue = 0f;
     private float _lastValidNegativeLimitYValue = 0f;
@@ -21,8 +21,8 @@ namespace JKQScreenshotsToolMod.UI
     public event Action<float> OnIncrementXValueChanged;
     public event Action<float> OnIncrementYValueChanged;
 
-    public event Action OnOpenScreenshotFolderButtonPressed = null;
-    public event Action OnTakeScreenshotsButtonPressed = null;
+    public event Action OnOpenScreenshotFolderButtonPressed;
+    public event Action OnTakeScreenshotsButtonPressed;
 
 
     private ToolMenuMapToolView() { }
@@ -92,7 +92,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void NegativeLimitXValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidNegativeLimitXValue, OnNegativeLimitXValueChanged, SetNegativeLimitXValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidNegativeLimitXValue,
+        onValidValuePassed: OnNegativeLimitXValueChanged,
+        onInvalidValuePassed: SetNegativeLimitXValue
+        );
     }
     public void SetNegativeLimitXValue(float negativeLimitX)
     {
@@ -102,7 +107,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void NegativeLimitYValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidNegativeLimitYValue, OnNegativeLimitYValueChanged, SetNegativeLimitYValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidNegativeLimitYValue,
+        onValidValuePassed: OnNegativeLimitYValueChanged,
+        onInvalidValuePassed: SetNegativeLimitYValue
+        );
     }
     public void SetNegativeLimitYValue(float negativeLimitY)
     {
@@ -112,7 +122,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void PositiveLimitXValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidPositiveLimitXValue, OnPositiveLimitXValueChanged, SetPositiveLimitXValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidPositiveLimitXValue,
+        onValidValuePassed: OnPositiveLimitXValueChanged,
+        onInvalidValuePassed: SetPositiveLimitXValue
+        );
     }
     public void SetPositiveLimitXValue(float positiveLimitX)
     {
@@ -122,7 +137,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void PositiveLimitYValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidPositiveLimitYValue, OnPositiveLimitYValueChanged, SetPositiveLimitYValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidPositiveLimitYValue,
+        onValidValuePassed: OnPositiveLimitYValueChanged,
+        onInvalidValuePassed: SetPositiveLimitYValue
+        );
     }
     public void SetPositiveLimitYValue(float positiveLimitY)
     {
@@ -132,7 +152,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void IncrementXValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidIncrementXValue, OnIncrementXValueChanged, SetIncrementXValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidIncrementXValue,
+        onValidValuePassed: OnIncrementXValueChanged,
+        onInvalidValuePassed: SetIncrementXValue
+        );
     }
     public void SetIncrementXValue(float incrementX)
     {
@@ -142,7 +167,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void IncrementYValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidIncrementYValue, OnIncrementYValueChanged, SetIncrementYValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidIncrementYValue,
+        onValidValuePassed: OnIncrementYValueChanged,
+        onInvalidValuePassed: SetIncrementYValue
+        );
     }
     public void SetIncrementYValue(float incrementY)
     {

@@ -114,6 +114,12 @@ namespace JKQScreenshotsToolMod.UI
     public TMP_InputField Extras_SkyboxColor_Green;
     public TMP_InputField Extras_SkyboxColor_Blue;
 
+    public TMP_InputField Extras_FogDensity;
+    public Image Extras_FogColorPreview;
+    public TMP_InputField Extras_FogColor_Red;
+    public TMP_InputField Extras_FogColor_Green;
+    public TMP_InputField Extras_FogColor_Blue;
+
     public TMP_InputField Extras_MainLightingIntensity;
     public Image Extras_MainLightingColorPreview;
     public TMP_InputField Extras_MainLightingColor_Red;
@@ -267,31 +273,37 @@ namespace JKQScreenshotsToolMod.UI
       // Extras View
       const string extrasViewPath = viewsPath + "ExtrasView/";
 
-      Extras_SkyboxColorPreview = transform.FindObjectInRootPath<Image>(extrasViewPath + "SkyboxColor/ColorPreview");
-      Extras_SkyboxColor_Red = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "SkyboxColor/RedInput");
-      Extras_SkyboxColor_Green = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "SkyboxColor/GreenInput");
-      Extras_SkyboxColor_Blue = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "SkyboxColor/BlueInput");
+      Extras_SkyboxColorPreview = transform.FindObjectInRootPath<Image>(extrasViewPath + "SkyboxGroup/Color/ColorPreview");
+      Extras_SkyboxColor_Red = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "SkyboxGroup/Color/RedInput");
+      Extras_SkyboxColor_Green = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "SkyboxGroup/Color/GreenInput");
+      Extras_SkyboxColor_Blue = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "SkyboxGroup/Color/BlueInput");
 
-      Extras_MainLightingIntensity = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingIntensity/Input");
-      Extras_MainLightingColorPreview = transform.FindObjectInRootPath<Image>(extrasViewPath + "MainLightingColor/ColorPreview");
-      Extras_MainLightingColor_Red = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingColor/RedInput");
-      Extras_MainLightingColor_Green = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingColor/GreenInput");
-      Extras_MainLightingColor_Blue = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingColor/BlueInput");
-      Extras_MainLightingRotation_X = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingRotation/XInput");
-      Extras_MainLightingRotation_Y = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingRotation/YInput");
-      Extras_MainLightingRotation_Z = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingRotation/ZInput");
+      Extras_FogDensity = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "FogGroup/Density/Input");
+      Extras_FogColorPreview = transform.FindObjectInRootPath<Image>(extrasViewPath + "FogGroup/Color/ColorPreview");
+      Extras_FogColor_Red = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "FogGroup/Color/RedInput");
+      Extras_FogColor_Green = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "FogGroup/Color/GreenInput");
+      Extras_FogColor_Blue = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "FogGroup/Color/BlueInput");
 
-      Extras_CharacterLightingIntensity = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "CharacterLightingIntensity/Input");
-      Extras_CharacterLightingColorPreview = transform.FindObjectInRootPath<Image>(extrasViewPath + "CharacterLightingColor/ColorPreview");
-      Extras_CharacterLightingColor_Red = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "CharacterLightingColor/RedInput");
-      Extras_CharacterLightingColor_Green = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "CharacterLightingColor/GreenInput");
-      Extras_CharacterLightingColor_Blue = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "CharacterLightingColor/BlueInput");
+      Extras_MainLightingIntensity = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingGroup/Intensity/Input");
+      Extras_MainLightingColorPreview = transform.FindObjectInRootPath<Image>(extrasViewPath + "MainLightingGroup/Color/ColorPreview");
+      Extras_MainLightingColor_Red = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingGroup/Color/RedInput");
+      Extras_MainLightingColor_Green = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingGroup/Color/GreenInput");
+      Extras_MainLightingColor_Blue = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingGroup/Color/BlueInput");
+      Extras_MainLightingRotation_X = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingGroup/Rotation/XInput");
+      Extras_MainLightingRotation_Y = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingGroup/Rotation/YInput");
+      Extras_MainLightingRotation_Z = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "MainLightingGroup/Rotation/ZInput");
 
-      Extras_ExtraLightingIntensity = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "ExtraLightingIntensity/Input");
-      Extras_ExtraLightingColorPreview = transform.FindObjectInRootPath<Image>(extrasViewPath + "ExtraLightingColor/ColorPreview");
-      Extras_ExtraLightingColor_Red = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "ExtraLightingColor/RedInput");
-      Extras_ExtraLightingColor_Green = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "ExtraLightingColor/GreenInput");
-      Extras_ExtraLightingColor_Blue = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "ExtraLightingColor/BlueInput");
+      Extras_CharacterLightingIntensity = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "CharacterLightingGroup/Intensity/Input");
+      Extras_CharacterLightingColorPreview = transform.FindObjectInRootPath<Image>(extrasViewPath + "CharacterLightingGroup/Color/ColorPreview");
+      Extras_CharacterLightingColor_Red = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "CharacterLightingGroup/Color/RedInput");
+      Extras_CharacterLightingColor_Green = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "CharacterLightingGroup/Color/GreenInput");
+      Extras_CharacterLightingColor_Blue = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "CharacterLightingGroup/Color/BlueInput");
+
+      Extras_ExtraLightingIntensity = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "ExtraLightingGroup/Intensity/Input");
+      Extras_ExtraLightingColorPreview = transform.FindObjectInRootPath<Image>(extrasViewPath + "ExtraLightingGroup/Color/ColorPreview");
+      Extras_ExtraLightingColor_Red = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "ExtraLightingGroup/Color/RedInput");
+      Extras_ExtraLightingColor_Green = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "ExtraLightingGroup/Color/GreenInput");
+      Extras_ExtraLightingColor_Blue = transform.FindObjectInRootPath<TMP_InputField>(extrasViewPath + "ExtraLightingGroup/Color/BlueInput");
     }
 
     public ToolMenuTabButton GetToolCanvasTabButton(ToolMenuTabs tab)

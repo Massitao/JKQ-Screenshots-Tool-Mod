@@ -229,6 +229,8 @@ namespace JKQScreenshotsToolMod
 
       // Extras
       _toolMenu.ExtrasView.SetSkyboxColorValue(CameraHelper.CameraSkyboxColor);
+      _toolMenu.ExtrasView.SetFogColorValue(CameraHelper.FogColor);
+      _toolMenu.ExtrasView.SetFogDensityValue(CameraHelper.FogDensity);
       _toolMenu.ExtrasView.SetMainLightingColorValue(GameHelper.MainLightingColor);
       _toolMenu.ExtrasView.SetMainLightingIntensityValue(GameHelper.MainLightingIntensity);
       _toolMenu.ExtrasView.SetMainLightingRotationValue(GameHelper.MainLightingRotation.eulerAngles);
@@ -936,6 +938,49 @@ namespace JKQScreenshotsToolMod
       _toolMenu.ExtrasView.SetSkyboxColorValue(newColor);
     }
 
+    private void SetFogColorRed(float colorRed)
+    {
+      colorRed = Mathf.Clamp01(colorRed);
+      Color newColor = CameraHelper.FogColor;
+
+      newColor.r = colorRed;
+      newColor.a = 1f;
+
+      SetFogColor(newColor);
+    }
+    private void SetFogColorGreen(float colorGreen)
+    {
+      colorGreen = Mathf.Clamp01(colorGreen);
+      Color newColor = CameraHelper.FogColor;
+
+      newColor.g = colorGreen;
+      newColor.a = 1f;
+
+      SetFogColor(newColor);
+    }
+    private void SetFogColorBlue(float colorBlue)
+    {
+      colorBlue = Mathf.Clamp01(colorBlue);
+      Color newColor = CameraHelper.FogColor;
+
+      newColor.b = colorBlue;
+      newColor.a = 1f;
+
+      SetFogColor(newColor);
+    }
+    private void SetFogColor(Color newColor)
+    {
+      CameraHelper.FogColor = newColor;
+      _toolMenu.ExtrasView.SetFogColorValue(newColor);
+    }
+
+    private void SetFogDensity(float density)
+    {
+      density = Mathf.Max(0, density);
+      CameraHelper.FogDensity = density;
+      _toolMenu.ExtrasView.SetFogDensityValue(density);
+    }
+
 
     private void SetMainLightingColorRed(float colorRed)
     {
@@ -1101,11 +1146,21 @@ namespace JKQScreenshotsToolMod
 
     private void SubscribeExtrasEvents()
     {
+      // Skybox
       _toolMenu.ExtrasView.OnSkyboxColorRedValueChanged += SetSkyboxColorRed;
       _toolMenu.ExtrasView.OnSkyboxColorGreenValueChanged += SetSkyboxColorGreen;
       _toolMenu.ExtrasView.OnSkyboxColorBlueValueChanged += SetSkyboxColorBlue;
 
 
+      // Fog
+      _toolMenu.ExtrasView.OnFogColorRedValueChanged += SetFogColorRed;
+      _toolMenu.ExtrasView.OnFogColorGreenValueChanged += SetFogColorGreen;
+      _toolMenu.ExtrasView.OnFogColorBlueValueChanged += SetFogColorBlue;
+
+      _toolMenu.ExtrasView.OnFogDensityValueChanged += SetFogDensity;
+
+
+      // Main Lighting
       _toolMenu.ExtrasView.OnMainLightingColorRedValueChanged += SetMainLightingColorRed;
       _toolMenu.ExtrasView.OnMainLightingColorGreenValueChanged += SetMainLightingColorGreen;
       _toolMenu.ExtrasView.OnMainLightingColorBlueValueChanged += SetMainLightingColorBlue;
@@ -1117,6 +1172,7 @@ namespace JKQScreenshotsToolMod
       _toolMenu.ExtrasView.OnMainLightingRotationZValueChanged += SetMainLightingRotationZ;
 
 
+      // Character Lighting
       _toolMenu.ExtrasView.OnCharacterLightingColorRedValueChanged += SetCharacterLightingColorRed;
       _toolMenu.ExtrasView.OnCharacterLightingColorGreenValueChanged += SetCharacterLightingColorGreen;
       _toolMenu.ExtrasView.OnCharacterLightingColorBlueValueChanged += SetCharacterLightingColorBlue;
@@ -1124,6 +1180,7 @@ namespace JKQScreenshotsToolMod
       _toolMenu.ExtrasView.OnCharacterLightingIntensityValueChanged += SetCharacterLightingIntensity;
 
 
+      // Extra Lighting
       _toolMenu.ExtrasView.OnExtraLightingColorRedValueChanged += SetExtraLightingColorRed;
       _toolMenu.ExtrasView.OnExtraLightingColorGreenValueChanged += SetExtraLightingColorGreen;
       _toolMenu.ExtrasView.OnExtraLightingColorBlueValueChanged += SetExtraLightingColorBlue;
@@ -1132,11 +1189,21 @@ namespace JKQScreenshotsToolMod
     }
     private void UnsubscribeExtrasEvents()
     {
+      // Skybox
       _toolMenu.ExtrasView.OnSkyboxColorRedValueChanged -= SetSkyboxColorRed;
       _toolMenu.ExtrasView.OnSkyboxColorGreenValueChanged -= SetSkyboxColorGreen;
       _toolMenu.ExtrasView.OnSkyboxColorBlueValueChanged -= SetSkyboxColorBlue;
 
 
+      // Fog
+      _toolMenu.ExtrasView.OnFogColorRedValueChanged -= SetFogColorRed;
+      _toolMenu.ExtrasView.OnFogColorGreenValueChanged -= SetFogColorGreen;
+      _toolMenu.ExtrasView.OnFogColorBlueValueChanged -= SetFogColorBlue;
+
+      _toolMenu.ExtrasView.OnFogDensityValueChanged -= SetFogDensity;
+
+
+      // Main Lighting
       _toolMenu.ExtrasView.OnMainLightingColorRedValueChanged -= SetMainLightingColorRed;
       _toolMenu.ExtrasView.OnMainLightingColorGreenValueChanged -= SetMainLightingColorGreen;
       _toolMenu.ExtrasView.OnMainLightingColorBlueValueChanged -= SetMainLightingColorBlue;
@@ -1148,6 +1215,7 @@ namespace JKQScreenshotsToolMod
       _toolMenu.ExtrasView.OnMainLightingRotationZValueChanged -= SetMainLightingRotationZ;
 
 
+      // Character Lighting
       _toolMenu.ExtrasView.OnCharacterLightingColorRedValueChanged -= SetCharacterLightingColorRed;
       _toolMenu.ExtrasView.OnCharacterLightingColorGreenValueChanged -= SetCharacterLightingColorGreen;
       _toolMenu.ExtrasView.OnCharacterLightingColorBlueValueChanged -= SetCharacterLightingColorBlue;
@@ -1155,6 +1223,7 @@ namespace JKQScreenshotsToolMod
       _toolMenu.ExtrasView.OnCharacterLightingIntensityValueChanged -= SetCharacterLightingIntensity;
 
 
+      // Extra Lighting
       _toolMenu.ExtrasView.OnExtraLightingColorRedValueChanged -= SetExtraLightingColorRed;
       _toolMenu.ExtrasView.OnExtraLightingColorGreenValueChanged -= SetExtraLightingColorGreen;
       _toolMenu.ExtrasView.OnExtraLightingColorBlueValueChanged -= SetExtraLightingColorBlue;

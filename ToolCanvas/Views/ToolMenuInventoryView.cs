@@ -4,18 +4,18 @@ namespace JKQScreenshotsToolMod.UI
 {
   public class ToolMenuInventoryView
   {
-    private ToolMenuComponents _toolMenuComponents;
+    private readonly ToolMenuComponents _toolMenuComponents;
 
-    public event Action OnFullBodyButtonPressed = null;
-    public event Action OnHatButtonPressed = null;
-    public event Action OnHeadButtonPressed = null;
-    public event Action OnTorsoButtonPressed = null;
-    public event Action OnHandsButtonPressed = null;
-    public event Action OnLegsButtonPressed = null;
-    public event Action OnBaseButtonPressed = null;
-    public event Action OnWeaponButtonPressed = null;
-    public event Action OnShieldButtonPressed = null;
-    public event Action<bool> OnHideMannequinStateChanged = null;
+    public event Action OnFullBodyButtonPressed;
+    public event Action OnHatButtonPressed;
+    public event Action OnHeadButtonPressed;
+    public event Action OnTorsoButtonPressed;
+    public event Action OnHandsButtonPressed;
+    public event Action OnLegsButtonPressed;
+    public event Action OnBaseButtonPressed;
+    public event Action OnWeaponButtonPressed;
+    public event Action OnShieldButtonPressed;
+    public event Action<bool> OnHideMannequinStateChanged;
 
 
     private ToolMenuInventoryView() { }

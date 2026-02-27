@@ -5,23 +5,23 @@ namespace JKQScreenshotsToolMod.UI
 {
   public class ToolMenuFreecamView
   {
-    private ToolMenuComponents _toolMenuComponents;
+    private readonly ToolMenuComponents _toolMenuComponents;
 
     private float _lastValidSpeedValue = 0f;
     private float _lastValidSpeedDampingValue = 0f;
     private float _lastValidFOVValue = 0f;
     private float _lastValidZoomSpeedValue = 0f;
 
-    public event Action<bool> OnFreecamStateChanged = null;
-    public event Action<bool> OnFreecamPlayerInputStateChanged = null;
-    public event Action<bool> OnFreecamAudioListenerStateChanged = null;
+    public event Action<bool> OnFreecamStateChanged;
+    public event Action<bool> OnFreecamPlayerInputStateChanged;
+    public event Action<bool> OnFreecamAudioListenerStateChanged;
     public event Action<float> OnSpeedChanged;
     public event Action<float> OnSpeedDampingChanged;
     public event Action<float> OnFOVChanged;
     public event Action<float> OnZoomSpeedChanged;
 
-    public event Action OnOpenScreenshotFolderButtonPressed = null;
-    public event Action OnTakeScreenshotButtonPressed = null;
+    public event Action OnOpenScreenshotFolderButtonPressed;
+    public event Action OnTakeScreenshotButtonPressed;
 
 
     private ToolMenuFreecamView() { }
@@ -128,7 +128,12 @@ namespace JKQScreenshotsToolMod.UI
     #region Input Fields
     private void SpeedValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidSpeedValue, OnSpeedChanged, SetSpeedValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidSpeedValue,
+        onValidValuePassed: OnSpeedChanged,
+        onInvalidValuePassed: SetSpeedValue
+        );
     }
     public void SetSpeedValue(float speed)
     {
@@ -138,7 +143,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void SpeedDampingValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidSpeedDampingValue, OnSpeedDampingChanged, SetSpeedDampingValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidSpeedDampingValue,
+        onValidValuePassed: OnSpeedDampingChanged,
+        onInvalidValuePassed: SetSpeedDampingValue
+        );
     }
     public void SetSpeedDampingValue(float dampingSpeed)
     {
@@ -148,7 +158,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void FOVValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidFOVValue, OnFOVChanged, SetFOVValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidFOVValue,
+        onValidValuePassed: OnFOVChanged,
+        onInvalidValuePassed: SetFOVValue
+        );
     }
     public void SetFOVValue(float fov)
     {
@@ -158,7 +173,12 @@ namespace JKQScreenshotsToolMod.UI
 
     private void ZoomSpeedValueChanged(string value)
     {
-      ToolMenuHelper.UpdateInputField(value, _lastValidZoomSpeedValue, OnZoomSpeedChanged, SetZoomSpeedValue);
+      ToolMenuHelper.UpdateInputField(
+        value: value,
+        previousValue: _lastValidZoomSpeedValue,
+        onValidValuePassed: OnZoomSpeedChanged,
+        onInvalidValuePassed: SetZoomSpeedValue
+        );
     }
     public void SetZoomSpeedValue(float zoomSpeed)
     {

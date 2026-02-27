@@ -1,6 +1,8 @@
-﻿using System;
-using UnityEngine.EventSystems;
+﻿using JKQScreenshotsToolMod.Enums;
+using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace JKQScreenshotsToolMod.UI
@@ -43,6 +45,7 @@ namespace JKQScreenshotsToolMod.UI
       DeselectCurrentGameObject();
     }
 
+
     public static void ButtonPressed(Action onButtonPressed)
     {
       if (onButtonPressed == null) return;
@@ -51,6 +54,41 @@ namespace JKQScreenshotsToolMod.UI
       DeselectCurrentGameObject();
     }
 
+    public static void UpdateColorChannelInputField(ColorChannels colorChannel, float value, ref Color lastValidColor, TMP_InputField inputField, Image preview)
+    {
+      if (inputField == null || preview == null) return;
+
+      inputField.SetTextWithoutNotify(value.ToString("0.00"));
+
+      switch (colorChannel)
+      {
+        case ColorChannels.Red:
+          lastValidColor.r = value;
+          break;
+        case ColorChannels.Green:
+          lastValidColor.g = value;
+          break;
+        case ColorChannels.Blue:
+          lastValidColor.b = value;
+          break;
+      }
+      lastValidColor.a = 1f;
+
+      UpdateColorPreview(preview, lastValidColor);
+    }
+    public static void UpdateColorInputFields(Color value, ref Color lastValidColor, TMP_InputField redIF, TMP_InputField greenIF, TMP_InputField blueIF, Image preview)
+    {
+      if (redIF == null || greenIF == null || blueIF == null || preview == null) return;
+
+      redIF.SetTextWithoutNotify(value.r.ToString("0.00"));
+      greenIF.SetTextWithoutNotify(value.g.ToString("0.00"));
+      blueIF.SetTextWithoutNotify(value.b.ToString("0.00"));
+
+      lastValidColor = value;
+      lastValidColor.a = 1f;
+
+      UpdateColorPreview(preview, lastValidColor);
+    }
     public static void UpdateColorPreview(Image preview, Color newColorValue)
     {
       preview.color = newColorValue;

@@ -237,6 +237,18 @@ namespace JKQScreenshotsToolMod.Helpers
         _fogComponent.downsampling = (value) ? 0 : _defaultFogDownsampling;
       }
     }
+
+    public Color FogColor
+    {
+      get => _fogComponent.color;
+      set => _fogComponent.color = value;
+    }
+    public float FogDensity
+    {
+      get => _fogComponent.density;
+      set => _fogComponent.density = value;
+    }
+
     #endregion
 
     #region Post-Processing Methods
