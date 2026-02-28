@@ -17,7 +17,7 @@ namespace JKQScreenshotsToolMod.Patches
   [HarmonyPatch(typeof(ManualCameraController), "OnTogglePressed", new Type[] { typeof(InputAction.CallbackContext) })]
   public static class ManualCameraControllerPatch
   {
-    public static Action<bool> OnInputToggle = null;
+    public static event Action<bool> OnInputToggle = null;
 
     private static void Prefix(ManualCameraController __instance, out bool __state)
     {
