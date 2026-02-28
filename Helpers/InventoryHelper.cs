@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Nexile.JKQuest;
 using Nexile.JKQuest.Rollback.Entities.Player;
 using JKQScreenshotsToolMod.Patches;
+using HarmonyLib;
 
 namespace JKQScreenshotsToolMod.Helpers
 {
@@ -12,24 +14,31 @@ namespace JKQScreenshotsToolMod.Helpers
   {
     #region Fields
     // Components
-    private GameObject fullBodyPreviewGO = null;
-    private GameObject itemPreviewGO = null;
-    private PlayerMeshManager mannequinMeshManager = null;
-    private List<GameObject> mannequin = new List<GameObject>();
+    private GameObject _fullBodyPreviewGO = null;
+    private GameObject _itemPreviewGO = null;
+    private PlayerMeshManager _mannequinMeshManager = null;
+    private List<GameObject> _mannequin = new List<GameObject>();
 
     // Inventory Camera Data
-    private InventoryCameraParams fullBodyCameraParams;
-    private InventoryCameraParams hatCameraParams;
-    private InventoryCameraParams headCameraParams;
-    private InventoryCameraParams torsoCameraParams;
-    private InventoryCameraParams handsCameraParams;
-    private InventoryCameraParams legsCameraParams;
-    private InventoryCameraParams baseCameraParams;
-    private InventoryCameraParams weaponCameraParams;
-    private InventoryCameraParams shieldCameraParams;
+    private InventoryCameraParams _fullBodyCameraParams;
+    private InventoryCameraParams _hatCameraParams;
+    private InventoryCameraParams _headCameraParams;
+    private InventoryCameraParams _torsoCameraParams;
+    private InventoryCameraParams _handsCameraParams;
+    private InventoryCameraParams _legsCameraParams;
+    private InventoryCameraParams _baseCameraParams;
+    private InventoryCameraParams _weaponCameraParams;
+    private InventoryCameraParams _shieldCameraParams;
 
     // States
-    private bool isMannequinHidden = false;
+    private bool _isMannequinHidden = false;
+
+    // Reflection References
+    private static readonly Type PlayerMeshManagerTypeRef = typeof(PlayerMeshManager);
+    private static readonly FieldInfo MannequinTorsoFieldInfo = AccessTools.Field(PlayerMeshManagerTypeRef, "torso");
+    private static readonly FieldInfo MannequinHandsFieldInfo = AccessTools.Field(PlayerMeshManagerTypeRef, "hands");
+    private static readonly FieldInfo MannequinLegsFieldInfo = AccessTools.Field(PlayerMeshManagerTypeRef, "legs");
+
     #endregion
 
 
@@ -48,15 +57,15 @@ namespace JKQScreenshotsToolMod.Helpers
       }
      
       // Get parent GameObjects for Full Body, and Mannequin previews 
-      fullBodyPreviewGO = inventoryDressingRoom.transform.Find("Full Player Preview")?.gameObject;
-      itemPreviewGO = inventoryDressingRoom.transform.Find("Item Preview")?.gameObject;
+      _fullBodyPreviewGO = inventoryDressingRoom.transform.Find("Full Player Preview")?.gameObject;
+      _itemPreviewGO = inventoryDressingRoom.transform.Find("Item Preview")?.gameObject;
 
       // Get Mannequin parts and its Mesh Manager
-      mannequinMeshManager = itemPreviewGO.GetComponentInChildren<PlayerMeshManager>(true);
-      UpdateMannequinParts(mannequinMeshManager);
+      _mannequinMeshManager = _itemPreviewGO.GetComponentInChildren<PlayerMeshManager>(true);
+      UpdateMannequinParts(_mannequinMeshManager);
 
       // Get Camera parameters for each item type
-      fullBodyCameraParams = new InventoryCameraParams(fullBodyPreviewGO.transform.Find("Inventory Camera")?.GetComponent<Camera>());
+      fullBodyCameraParams = new InventoryCameraParams(_fullBodyPreviewGO.transform.Find("Inventory Camera")?.GetComponent<Camera>());
       hatCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Hat")?.GetComponent<Camera>());
       headCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Head")?.GetComponent<Camera>());
       torsoCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Torso")?.GetComponent<Camera>());
@@ -72,10 +81,10 @@ namespace JKQScreenshotsToolMod.Helpers
 
     public void Clear()
     {
-      fullBodyPreviewGO = null;
-      itemPreviewGO = null;
-      mannequinMeshManager = null;
-      mannequin.Clear();
+      _fullBodyPreviewGO = null;
+      _itemPreviewGO = null;
+      _mannequinMeshManager = null;
+      _mannequin.Clear();
 
       PlayerMeshManagerPatch.OnItemEquipTriggered -= UpdateMannequinParts;
     }
@@ -149,11 +158,11 @@ namespace JKQScreenshotsToolMod.Helpers
 
     private void EnableFullBodyPreview(bool enable)
     {
-      fullBodyPreviewGO.SetActive(enable);
+      _fullBodyPreviewGO.SetActive(enable);
     }
     private void EnableItemPreview(bool enable)
     {
-      itemPreviewGO.SetActive(enable);
+      _itemPreviewGO.SetActive(enable);
     }
     #endregion
 
@@ -161,41 +170,35 @@ namespace JKQScreenshotsToolMod.Helpers
     private void UpdateMannequinParts(PlayerMeshManager playerMeshManager)
     {
       // If event owner isn't the Mannequin Mesh Manager, skip
-      if (playerMeshManager != mannequinMeshManager) return;
+      if (playerMeshManager != _mannequinMeshManager) return;
 
       // Clear previous mannequin components
-      mannequin.Clear();
+      _mannequin.Clear();
 
       // Get Torso
-      GameObject mannequinTorso = (GameObject)typeof(PlayerMeshManager)
-        .GetField("torso", BindingFlags.Instance | BindingFlags.NonPublic)
-        .GetValue(mannequinMeshManager);
-      if (mannequinTorso.name == "torso_mannequin") mannequinTorso.SetActive(!isMannequinHidden);
-      mannequin.Add(mannequinTorso);
+      GameObject mannequinTorso = (GameObject)MannequinTorsoFieldInfo.GetValue(_mannequinMeshManager);
+      _mannequin.Add(mannequinTorso);
+      if (mannequinTorso.name == "torso_mannequin") mannequinTorso.SetActive(!_isMannequinHidden);
 
       // Get Hands
-      GameObject mannequinHands = (GameObject)typeof(PlayerMeshManager)
-        .GetField("hands", BindingFlags.Instance | BindingFlags.NonPublic)
-        .GetValue(mannequinMeshManager);
-      if (mannequinHands.name == "hands_mannequin") mannequinHands.SetActive(!isMannequinHidden);
-      mannequin.Add(mannequinHands);
+      GameObject mannequinHands = (GameObject)MannequinHandsFieldInfo.GetValue(_mannequinMeshManager);
+      _mannequin.Add(mannequinHands);
+      if (mannequinHands.name == "hands_mannequin") mannequinHands.SetActive(!_isMannequinHidden);
 
       // Get Legs
-      GameObject mannequinLegs = (GameObject)typeof(PlayerMeshManager)
-        .GetField("legs", BindingFlags.Instance | BindingFlags.NonPublic)
-        .GetValue(mannequinMeshManager);
-      if (mannequinLegs.name == "legs_mannequin") mannequinLegs.SetActive(!isMannequinHidden);
-      mannequin.Add(mannequinLegs);
+      GameObject mannequinLegs = (GameObject)MannequinLegsFieldInfo.GetValue(_mannequinMeshManager);
+      _mannequin.Add(mannequinLegs);
+      if (mannequinLegs.name == "legs_mannequin") mannequinLegs.SetActive(!_isMannequinHidden);
     }
     public void HideInventoryMannequin(bool hide)
     {
-      isMannequinHidden = hide;
+      _isMannequinHidden = hide;
 
-      foreach (GameObject mannequinPart in mannequin)
+      foreach (GameObject mannequinPart in _mannequin)
       {
         if (mannequinPart.name == "torso_mannequin" || mannequinPart.name == "hands_mannequin" || mannequinPart.name == "legs_mannequin")
         {
-          mannequinPart.SetActive(!isMannequinHidden);
+          mannequinPart.SetActive(!_isMannequinHidden);
         }
       }
     }

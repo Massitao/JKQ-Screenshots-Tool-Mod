@@ -75,26 +75,34 @@ namespace JKQScreenshotsToolMod.Helpers
       System.Guid Map_MoveActionGUID = System.Guid.Parse("aa5385b7-d9a1-4e15-8d6c-36af50600d03");
       UnityEngine.InputSystem.InputAction Map_MoveAction = _playerInput.actions.FindAction(Map_MoveActionGUID);
 
-      // The first 2 Bindings in Map_MoveAction are Controller inputs.
-      // We don't need them because it there are already controller bindings in ManualCamera_MoveAction.
-      for (int i = 2; i < Map_MoveAction.bindings.Count; i++)
-      {
-        // There's probably a better way to do this :I
-        // Skips WASD inputs
-        if (i < Map_MoveAction.bindings.Count - 5)
-        {
-          ManualCamera_MoveAction.AddBinding(Map_MoveAction.bindings[i]);
-        }
 
-        // W A inputs only
-        if (i >= Map_MoveAction.bindings.Count - 5)
-        {
-          if (i < Map_MoveAction.bindings.Count - 2)
-          {
-            ManualCamera_ZoomAction.AddBinding(Map_MoveAction.bindings[i]);
-          }
-        }
+      /// Map_MoveAction Bindings:
+      /// 
+      /// [0]  Gamepad Left Stick
+      /// [1]  Gamepad DPad
+      /// [2]  Movemap 2D Vector (Arrow Keys)
+      /// [3]  Keyboard Up Arrow
+      /// [4]  Keyboard Down Arrow
+      /// [5]  Keyboard Left Arrow
+      /// [6]  Keyboard Right Arrow
+      /// [7]  Movemap 2D Vector (Arrow Keys)
+      /// [8]  Keyboard W
+      /// [9]  Keyboard S
+      /// [10] Keyboard A
+      /// [11] Keyboard D
+      /// 
+      /// Total Length: 12
+
+
+      // Gets the composite and Keyboard arrow keys bindings and adds it to the Manual Camera Move Action
+      for (int i = 2; i <= 6; i++)
+      {
+        ManualCamera_MoveAction.AddBinding(Map_MoveAction.bindings[i]);
       }
+
+      // Gets the W and A key bindings and adds it to the Manual Camera Zoom Action
+      ManualCamera_ZoomAction.AddBinding(Map_MoveAction.bindings[8]);  // W -> zoom in
+      ManualCamera_ZoomAction.AddBinding(Map_MoveAction.bindings[10]); // A -> zoom out
 
       _injectedPCInputs = true;
     }
@@ -102,25 +110,25 @@ namespace JKQScreenshotsToolMod.Helpers
 
 
     #region Enable Input Methods
-    public bool IsPlayerInputEnabled() =>_playerInputActionMap.enabled;
+    public bool IsPlayerInputEnabled() => _playerInputActionMap.enabled;
     public void EnablePlayerInput(bool enable)
     {
       if (enable) _playerInputActionMap.Enable();
-      else        _playerInputActionMap.Disable();
+      else _playerInputActionMap.Disable();
     }
 
     public bool IsUIInputEnabled() => _uiInputActionMap.enabled;
     public void EnableUIInput(bool enable)
     {
       if (enable) _uiInputActionMap.Enable();
-      else        _uiInputActionMap.Disable();
+      else _uiInputActionMap.Disable();
     }
 
     public bool IsManualCameraInputEnabled() => _manualCameraInputActionMap.enabled;
     public void EnableManualCameraInput(bool enable)
     {
       if (enable) _manualCameraInputActionMap.Enable();
-      else        _manualCameraInputActionMap.Disable();
+      else _manualCameraInputActionMap.Disable();
     }
 
     public void DisableAllInputs()

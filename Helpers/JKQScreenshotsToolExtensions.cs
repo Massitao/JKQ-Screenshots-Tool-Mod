@@ -20,7 +20,7 @@ namespace JKQScreenshotsToolMod.Helpers
         return default;
       }
 
-      return foundTransform.GetComponent<T>();
+      return foundComponent;
     }
   }
 }

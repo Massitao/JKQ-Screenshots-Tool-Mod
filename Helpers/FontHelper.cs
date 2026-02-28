@@ -26,6 +26,7 @@ namespace JKQScreenshotsToolMod.Helpers
     {
       _bradleyDJRFont = null;
       _berninaSansRegularFont = null;
+      _berninaSansExtraBoldFont = null;
     }
     #endregion
     
