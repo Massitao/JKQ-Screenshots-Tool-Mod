@@ -65,15 +65,15 @@ namespace JKQScreenshotsToolMod.Helpers
       UpdateMannequinParts(_mannequinMeshManager);
 
       // Get Camera parameters for each item type
-      fullBodyCameraParams = new InventoryCameraParams(_fullBodyPreviewGO.transform.Find("Inventory Camera")?.GetComponent<Camera>());
-      hatCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Hat")?.GetComponent<Camera>());
-      headCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Head")?.GetComponent<Camera>());
-      torsoCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Torso")?.GetComponent<Camera>());
-      handsCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Hands")?.GetComponent<Camera>());
-      legsCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Legs")?.GetComponent<Camera>());
-      baseCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Base")?.GetComponent<Camera>());
-      weaponCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Weapon")?.GetComponent<Camera>());
-      shieldCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Shield")?.GetComponent<Camera>());
+      _fullBodyCameraParams = new InventoryCameraParams(_fullBodyPreviewGO.transform.Find("Inventory Camera")?.GetComponent<Camera>());
+      _hatCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Hat")?.GetComponent<Camera>());
+      _headCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Head")?.GetComponent<Camera>());
+      _torsoCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Torso")?.GetComponent<Camera>());
+      _handsCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Hands")?.GetComponent<Camera>());
+      _legsCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Legs")?.GetComponent<Camera>());
+      _baseCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Base")?.GetComponent<Camera>());
+      _weaponCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Weapon")?.GetComponent<Camera>());
+      _shieldCameraParams = new InventoryCameraParams(inventoryDressingRoom.transform.Find("Cameras/Camera_Shield")?.GetComponent<Camera>());
 
       // Update Mannequin parts whenever the item preview changes
       PlayerMeshManagerPatch.OnItemEquipTriggered += UpdateMannequinParts;
@@ -97,63 +97,63 @@ namespace JKQScreenshotsToolMod.Helpers
       EnableFullBodyPreview(true);
       EnableItemPreview(false);
 
-      return fullBodyCameraParams;
+      return _fullBodyCameraParams;
     }
     public InventoryCameraParams ViewHatPreview()
     {
       EnableFullBodyPreview(false);
       EnableItemPreview(true);
 
-      return hatCameraParams;
+      return _hatCameraParams;
     }
     public InventoryCameraParams ViewHeadPreview()
     {
       EnableFullBodyPreview(false);
       EnableItemPreview(true);
 
-      return headCameraParams;
+      return _headCameraParams;
     }
     public InventoryCameraParams ViewTorsoPreview()
     {
       EnableFullBodyPreview(false);
       EnableItemPreview(true);
 
-      return torsoCameraParams;
+      return _torsoCameraParams;
     }
     public InventoryCameraParams ViewHandsPreview()
     {
       EnableFullBodyPreview(false);
       EnableItemPreview(true);
 
-      return handsCameraParams;
+      return _handsCameraParams;
     }
     public InventoryCameraParams ViewLegsPreview()
     {
       EnableFullBodyPreview(false);
       EnableItemPreview(true);
 
-      return legsCameraParams;
+      return _legsCameraParams;
     }
     public InventoryCameraParams ViewBasePreview()
     {
       EnableFullBodyPreview(false);
       EnableItemPreview(true);
 
-      return baseCameraParams;
+      return _baseCameraParams;
     }
     public InventoryCameraParams ViewWeaponPreview()
     {
       EnableFullBodyPreview(false);
       EnableItemPreview(true);
 
-      return weaponCameraParams;
+      return _weaponCameraParams;
     }
     public InventoryCameraParams ViewShieldPreview()
     {
       EnableFullBodyPreview(false);
       EnableItemPreview(true);
 
-      return shieldCameraParams;
+      return _shieldCameraParams;
     }
 
     private void EnableFullBodyPreview(bool enable)
