@@ -193,7 +193,7 @@ namespace JKQScreenshotsToolMod.UI
       ToolMenuHelper.ButtonPressed(OnOpenScreenshotFolderButtonPressed);
     }
 
-    public void EnabeTakeScreenshotButton(bool enable)
+    public void EnableTakeScreenshotButton(bool enable)
     {
       _toolMenuComponents.Freecam_TakeScreenshot.interactable = enable;
     }

@@ -443,7 +443,7 @@ namespace JKQScreenshotsToolMod
 
       if (!_screenshotsController.HasEnoughDiskSpace(estimatedSize))
       {
-        _toolMenu.FreecamView.EnabeTakeScreenshotButton(false);
+        _toolMenu.FreecamView.EnableTakeScreenshotButton(false);
         _toolMenu.FreecamView.ShowStorageWarning(true);
         return false;
       }
@@ -455,7 +455,7 @@ namespace JKQScreenshotsToolMod
       if (!CanTakeFreecamScrenshot()) return false;
 
       _toolMenu.FreecamView.ShowStorageWarning(false);
-      _toolMenu.FreecamView.EnabeTakeScreenshotButton(true);
+      _toolMenu.FreecamView.EnableTakeScreenshotButton(true);
       return true;
     }
     private void TryTakeFreecamScreenshot()
