@@ -80,9 +80,7 @@ namespace JKQScreenshotsToolMod
       _mainTool.SetToolMenuOpenState(false);
       Time.timeScale = 0.01f;
 
-      // Wait 4 frames to make sure the tool menu canvas is invisible
-      yield return _waitForEndOfFrame;
-      yield return _waitForEndOfFrame;
+      // Wait 2 frames to make sure the tool menu canvas is invisible
       yield return _waitForEndOfFrame;
       yield return _waitForEndOfFrame;
 
@@ -90,7 +88,7 @@ namespace JKQScreenshotsToolMod
       ScreenCapture.CaptureScreenshot(Path.Combine(_mainTool.ScreenshotsFolderPath, screenshotName), (int)detailLevel);
       JKQScreenshotsToolLogger.Msg($"JKQ-SingularScreenshot-{_mainTool.SingularScreenshotsCountEntry.Value} taken!");
 
-      // Another 4 frames in case taking a screenshot takes longer
+      // Wait 4 frames in case the screenshot takes a bit longer to get captured
       yield return _waitForEndOfFrame;
       yield return _waitForEndOfFrame;
       yield return _waitForEndOfFrame;
@@ -136,9 +134,7 @@ namespace JKQScreenshotsToolMod
 
       uint detailLevel = _mainTool.ScreenshotDetailLevelEntry.Value;
 
-      // Wait 4 frames to make sure the tool menu canvas gets transparent
-      yield return _waitForEndOfFrame;
-      yield return _waitForEndOfFrame;
+      // Wait 2 frames to make sure the tool menu canvas gets transparent
       yield return _waitForEndOfFrame;
       yield return _waitForEndOfFrame;
 
@@ -152,7 +148,7 @@ namespace JKQScreenshotsToolMod
         ScreenCapture.CaptureScreenshot(Path.Combine(_mainTool.ScreenshotsFolderPath, screenshotName), (int)detailLevel);
       }
 
-      // Another 4 frames in case taking the last screenshot takes longer
+      // Wait 4 frames in case the last screenshot takes a bit longer to get captured
       yield return _waitForEndOfFrame;
       yield return _waitForEndOfFrame;
       yield return _waitForEndOfFrame;
