@@ -8,12 +8,12 @@ namespace JKQScreenshotsToolMod.UI
   {
     // References and Components
     private ToolMenuComponents _toolMenuComponents;
-    public ToolMenuHeaderView HeaderView {  get; private set; }
-    public ToolMenuFreecamView FreecamView {  get; private set; }
-    public ToolMenuMapToolView MapToolView {  get; private set; }
-    public ToolMenuInventoryView InventoryView {  get; private set; }
-    public ToolMenuTogglesView TogglesView {  get; private set; }
-    public ToolMenuExtrasView ExtrasView {  get; private set; }
+    public ToolMenuHeaderView HeaderView { get; private set; }
+    public ToolMenuFreecamView FreecamView { get; private set; }
+    public ToolMenuMapToolView MapToolView { get; private set; }
+    public ToolMenuInventoryView InventoryView { get; private set; }
+    public ToolMenuTogglesView TogglesView { get; private set; }
+    public ToolMenuExtrasView ExtrasView { get; private set; }
 
 
     private void Awake()
@@ -50,16 +50,6 @@ namespace JKQScreenshotsToolMod.UI
       ExtrasView.UnsubscribeEvents();
     }
 
-    private void OnDestroy()
-    {
-      HeaderView = null;
-      FreecamView = null;
-      MapToolView = null;
-      InventoryView = null;
-      TogglesView = null;
-      ExtrasView = null;
-    }
-
 
     public bool IsScreenshotToolMenuOpen() => _toolMenuComponents.ToolCanvasGroup.alpha == 1f;
     public void SetScreenshotToolMenuOpen(bool open)
@@ -75,13 +65,12 @@ namespace JKQScreenshotsToolMod.UI
 
     public void SetScreenshotToolFonts(TMP_FontAsset titleFont, TMP_FontAsset contentFont)
     {
-      List<TMP_Text> allTexts = new List<TMP_Text>(_toolMenuComponents.ToolCanvas_Texts);
-      allTexts.Remove(_toolMenuComponents.Header_Title);
-
       _toolMenuComponents.Header_Title.font = titleFont;
-      foreach (TMP_Text TMText in allTexts)
+
+      foreach (TMP_Text text in _toolMenuComponents.ToolCanvas_Texts)
       {
-        TMText.font = contentFont;
+        if (text == _toolMenuComponents.Header_Title) continue;
+        text.font = contentFont;
       }
     }
   }
