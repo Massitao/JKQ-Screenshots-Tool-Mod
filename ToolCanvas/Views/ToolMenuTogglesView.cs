@@ -15,7 +15,6 @@ namespace JKQScreenshotsToolMod.UI
     public event Action<bool> OnDisableParticlesStateChanged;
     public event Action<bool> OnDisableBloomStateChanged;
     public event Action<bool> OnDisableVignettingStateChanged;
-    public event Action<bool> OnDisableWaterEffectStateChanged;
     public event Action<bool> OnDisableSkyboxStateChanged;
 
     public event Action<bool> OnEnablePointFilteringStateChanged;
