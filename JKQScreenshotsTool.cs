@@ -187,7 +187,7 @@ namespace JKQScreenshotsToolMod
       _toolMenu = GameObject.Instantiate(_toolMenuPrefab).AddComponent<ToolMenuController>();
       _toolMenu.gameObject.name = ToolMenuPrefabName;
       _toolMenu.gameObject.hideFlags = (UnityEngine.HideFlags)61;
-      _toolMenu.SetScreenshotToolFonts(FontHelper.GetBradleyDJRFont(), FontHelper.GetBerninaSansFont());
+      _toolMenu.SetScreenshotToolFonts(FontHelper.GetBradleyDJRFont(), FontHelper.GetBerninaSansRegularFont());
       GameObject.DontDestroyOnLoad(_toolMenu.gameObject);
 
       _screenshotsController = _toolMenu.gameObject.AddComponent<ScreenshotsController>();

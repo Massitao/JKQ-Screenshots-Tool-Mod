@@ -8,29 +8,32 @@ namespace JKQScreenshotsToolMod.Helpers
   {
     #region Fields
     // Font Assets
-    private TMP_FontAsset _bradleyDJR_Font;
-    private TMP_FontAsset _berninaSans_Font;
+    private TMP_FontAsset _bradleyDJRFont;
+    private TMP_FontAsset _berninaSansRegularFont;
+    private TMP_FontAsset _berninaSansExtraBoldFont;
     #endregion
 
 
     #region Initialization Methods
     public void Init()
     {
-      _bradleyDJR_Font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "BradleyDJR-Display SDF");
-      _berninaSans_Font = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Bernina Sans SDF");
+      _bradleyDJRFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "BradleyDJR-Display SDF");
+      _berninaSansRegularFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Bernina Sans SDF");
+      _berninaSansExtraBoldFont = Resources.FindObjectsOfTypeAll<TMP_FontAsset>().FirstOrDefault(f => f.name == "Bernina Sans Extrabold SDF");
     }
 
     public void Clear()
     {
-      _bradleyDJR_Font = null;
-      _berninaSans_Font = null;
+      _bradleyDJRFont = null;
+      _berninaSansRegularFont = null;
     }
     #endregion
     
 
     #region Font Methods
-    public TMP_FontAsset GetBradleyDJRFont() => _bradleyDJR_Font;
-    public TMP_FontAsset GetBerninaSansFont() => _berninaSans_Font;
+    public TMP_FontAsset GetBradleyDJRFont() => _bradleyDJRFont;
+    public TMP_FontAsset GetBerninaSansRegularFont() => _berninaSansRegularFont;
+    public TMP_FontAsset GetBerninaSansExtraBoldFont() => _berninaSansExtraBoldFont;
     #endregion
   }
 }
