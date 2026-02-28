@@ -17,18 +17,18 @@ namespace JKQScreenshotsToolMod.Patches
   [HarmonyPatch(typeof(UIToggle), "Update")]
   public static class UITogglePatch
   {
-    public static Action<bool> OnInputToggle = null;
+    public static event Action<bool> OnInputToggle = null;
 
-    private static void Prefix(out Tuple<bool, bool> __state)
+    private static void Prefix(out (bool wasDisabled, bool keyPressed) __state)
     {
       // The code inside this method will run before 'PrivateMethod' is executed
-      __state = Tuple.Create(UIToggle.UIDisabld, Input.GetKeyDown(KeyCode.F11));
+      __state = (UIToggle.UIDisabld, Input.GetKeyDown(KeyCode.F11));
     }
 
-    private static void Postfix(Tuple<bool, bool> __state)
+    private static void Postfix((bool wasDisabled, bool keyPressed) __state)
     {
       // The code inside this method will run after 'PrivateMethod' has executed
-      if (__state.Item1 != UIToggle.UIDisabld && __state.Item2)
+      if (__state.wasDisabled != UIToggle.UIDisabld && __state.keyPressed)
       {
         OnInputToggle?.Invoke(UIToggle.UIDisabld);
       }

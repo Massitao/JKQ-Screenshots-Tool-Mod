@@ -23,6 +23,11 @@ namespace JKQScreenshotsToolMod
     private WaitForEndOfFrame _waitForEndOfFrame = null;
 
 
+    private void Awake()
+    {
+      _waitForEndOfFrame = new WaitForEndOfFrame();
+    }
+
     private void CreateScreenshotsFolder()
     {
       if (Directory.Exists(_mainTool.ScreenshotsFolderPath)) return;
@@ -143,7 +148,7 @@ namespace JKQScreenshotsToolMod
         string screenshotName = $"JKQ-MapScreenshot-({_mainTool.MapScreenshotsCountEntry.Value++}).png";
 
         _mainTool.CameraHelper.CameraPosition = screenshotRangeValues.allScreenshotPositions[(int)_takenMapScreenshotCount];
-        yield return new WaitForEndOfFrame();
+        yield return _waitForEndOfFrame;
         ScreenCapture.CaptureScreenshot(Path.Combine(_mainTool.ScreenshotsFolderPath, screenshotName), (int)detailLevel);
       }
 
@@ -160,6 +165,8 @@ namespace JKQScreenshotsToolMod
       if (_mapScreenshotsCoroutine == null) return;
 
       // Clear Coroutine
+      StopCoroutine(_mapScreenshotsCoroutine);
+
       _mapScreenshotsCoroutine = null;
       JKQScreenshotsToolLogger.Msg($"{_takenMapScreenshotCount} map screenshots taken!");
 
