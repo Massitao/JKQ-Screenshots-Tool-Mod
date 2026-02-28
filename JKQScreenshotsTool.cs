@@ -313,11 +313,11 @@ namespace JKQScreenshotsToolMod
     private void SetDetailLevel(uint detailLevel)
     {
       if (detailLevel == 0) detailLevel = 1u;
-      if (detailLevel == 9) detailLevel = 9u;
+      if (detailLevel > 9) detailLevel = 9u;
 
       // Avoid gigantic screenshots. Why would anyone need a +10K resolution screenshot?
       int screenWidthWithDetailLevel = Screen.width * (int)detailLevel;
-      int resolutionWidth10K = 10240;
+      int resolutionWidth10K = 10240; // 10K resolution
       if (screenWidthWithDetailLevel > resolutionWidth10K) detailLevel = (uint)Mathf.FloorToInt(resolutionWidth10K / Screen.width);
 
       // Set Detail Level
@@ -357,20 +357,13 @@ namespace JKQScreenshotsToolMod
     public void EnableFreecam(bool enable)
     {
       CameraHelper.IsManualCameraControllerEnabled = enable;
-      _toolMenu.FreecamView.SetFreecamToggleState(enable);
-
-      if (!enable)
-      {
-        EnableFreecamPlayerInput(false);
-        EnableFreecamAsAudioListener(false);
-
-        if (_isInInventoryView)
-        {
-          ExitInventoryView();
-        }
-      }
+      SyncFreecamState(enable);
     }
     private void EnableFreecamInputToggle(bool isOn)
+    {
+      SyncFreecamState(isOn);
+    }
+    private void SyncFreecamState(bool isOn)
     {
       _toolMenu.FreecamView.SetFreecamToggleState(isOn);
 
@@ -385,6 +378,7 @@ namespace JKQScreenshotsToolMod
         }
       }
     }
+
 
     public void EnableFreecamPlayerInput(bool isOn)
     {
@@ -495,7 +489,7 @@ namespace JKQScreenshotsToolMod
       _toolMenu.FreecamView.OnSpeedChanged -= SetFreecamSpeed;
       _toolMenu.FreecamView.OnSpeedDampingChanged -= SetFreecamSpeedDamping;
       _toolMenu.FreecamView.OnFOVChanged -= SetFreecamFOV;
-      _toolMenu.FreecamView.OnZoomSpeedChanged += SetFreecamZoomSpeed;
+      _toolMenu.FreecamView.OnZoomSpeedChanged -= SetFreecamZoomSpeed;
 
       _toolMenu.FreecamView.OnOpenScreenshotFolderButtonPressed -= OpenScreenshotsFolder;
       _toolMenu.FreecamView.OnTakeScreenshotButtonPressed -= TryTakeFreecamScreenshot;
@@ -854,7 +848,7 @@ namespace JKQScreenshotsToolMod
     private void ShowRealModels(bool show)
     {
       CameraHelper.IsShowingRealModels = show;
-      _toolMenu.TogglesView.SetFixFogArtifactsToggleState(show);
+      _toolMenu.TogglesView.SetShowRealModelsToggleState(show);
     }
     private void FixFogArtifacts(bool fix)
     {
