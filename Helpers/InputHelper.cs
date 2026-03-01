@@ -85,7 +85,7 @@ namespace JKQScreenshotsToolMod.Helpers
       /// [4]  Keyboard Down Arrow
       /// [5]  Keyboard Left Arrow
       /// [6]  Keyboard Right Arrow
-      /// [7]  Movemap 2D Vector (Arrow Keys)
+      /// [7]  Movemap 2D Vector (WASD Keys)
       /// [8]  Keyboard W
       /// [9]  Keyboard S
       /// [10] Keyboard A
@@ -93,16 +93,18 @@ namespace JKQScreenshotsToolMod.Helpers
       /// 
       /// Total Length: 12
 
+      // Inject Arrow Keys inputs to ManualCamera_MoveAction
+      // The action already has controller inputs, so it's not necessary to include them
+      ManualCamera_MoveAction.AddBinding(Map_MoveAction.bindings[2]); // 2D Vector Composite (for Arrow keys)
+      ManualCamera_MoveAction.AddBinding(Map_MoveAction.bindings[3]); // Up Arrow
+      ManualCamera_MoveAction.AddBinding(Map_MoveAction.bindings[4]); // Down Arrow
+      ManualCamera_MoveAction.AddBinding(Map_MoveAction.bindings[5]); // Left Arrow
+      ManualCamera_MoveAction.AddBinding(Map_MoveAction.bindings[6]); // Right Arrow
 
-      // Gets the composite and Keyboard arrow keys bindings and adds it to the Manual Camera Move Action
-      for (int i = 2; i <= 6; i++)
-      {
-        ManualCamera_MoveAction.AddBinding(Map_MoveAction.bindings[i]);
-      }
-
-      // Gets the W and A key bindings and adds it to the Manual Camera Zoom Action
-      ManualCamera_ZoomAction.AddBinding(Map_MoveAction.bindings[8]);  // W -> zoom in
-      ManualCamera_ZoomAction.AddBinding(Map_MoveAction.bindings[10]); // A -> zoom out
+      // Inject [W] and [S] key inputs to ManualCamera_ZoomAction
+      ManualCamera_ZoomAction.AddBinding(Map_MoveAction.bindings[7]); // 2D Vector Composite (for WASD keys)
+      ManualCamera_ZoomAction.AddBinding(Map_MoveAction.bindings[8]); // W key
+      ManualCamera_ZoomAction.AddBinding(Map_MoveAction.bindings[9]); // S key
 
       _injectedPCInputs = true;
     }
